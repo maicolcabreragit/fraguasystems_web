@@ -3,49 +3,36 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { IndustrialButton } from "@/components/ui/IndustrialButton";
 
 /* ═══════════════════════════════════════════════════════════════════
-   Navbar — Sticky Industrial Navigation
+   Navbar — Industrial Clean v2.1
    
-   - Transparent on top, glassmorphism on scroll
-   - Dropdown submenu on "Servicios"
-   - CTA always visible
-   - Mobile hamburger menu
+   - Scroll-adaptive colors (white on dark hero, dark on scroll)
+   - Servicios dropdown submenu (homepage section + full catalog)
+   - Anchor links work from any page via /#hash routing
    ═══════════════════════════════════════════════════════════════════ */
 
-interface NavChild {
-  label: string;
-  href: string;
-  isPage?: boolean;
-}
+const serviciosSubmenu = [
+  { label: "Resumen", desc: "Visión general de nuestras capacidades", href: "/#servicios" },
+  { label: "Catálogo Completo", desc: "Los 100+ servicios de ingeniería HORECA", href: "/servicios" },
+];
 
-interface NavItem {
-  label: string;
-  href: string;
-  children?: NavChild[];
-}
-
-const navLinks: NavItem[] = [
-  {
-    label: "Servicios",
-    href: "#servicios",
-    children: [
-      { label: "Nuestros Servicios", href: "/servicios", isPage: true },
-      { label: "Casos de Ingeniería", href: "/casos", isPage: true },
-    ],
-  },
-  { label: "Sobre Nosotros", href: "#nosotros" },
-  { label: "Proceso", href: "#proceso" },
-  { label: "Contacto", href: "#contacto" },
-  { label: "Área de Clientes", href: "/area-clientes" },
+const navLinks = [
+  { label: "Sobre Nosotros", href: "/#nosotros" },
+  { label: "Proceso", href: "/#proceso" },
+  { label: "Contacto", href: "/#contacto" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [serviciosOpen, setServiciosOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownTimeout = useRef<ReturnType<typeof setTimeout>>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -58,23 +45,53 @@ export function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setServiciosOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    setOpenDropdown(null);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setServiciosOpen(false);
+    
+    // Handle /#hash links — navigate to home first if needed
+    if (href.startsWith("/#")) {
+      const hash = href.slice(1); // e.g. "#proceso"
+      if (pathname === "/") {
+        // Already on homepage, just scroll
+        const el = document.querySelector(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        // On a sub-page, navigate to homepage with hash
+        router.push(href);
+      }
+      return;
     }
   };
 
-  const handleMouseEnter = (label: string) => {
+  const handleDropdownEnter = () => {
     if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
-    setOpenDropdown(label);
+    setServiciosOpen(true);
   };
 
-  const handleMouseLeave = () => {
-    dropdownTimeout.current = setTimeout(() => setOpenDropdown(null), 150);
+  const handleDropdownLeave = () => {
+    dropdownTimeout.current = setTimeout(() => setServiciosOpen(false), 150);
   };
+
+  const linkClasses = `
+    px-4 py-2
+    text-sm font-medium transition-colors duration-300
+  `;
+
+  const linkColorClasses = scrolled
+    ? "text-soft-gray hover:text-ink-black"
+    : "text-machine-gray hover:text-titanium-white";
 
   return (
     <>
@@ -86,163 +103,132 @@ export function Navbar() {
           fixed top-0 left-0 right-0 z-50
           transition-all duration-500
           ${scrolled
-            ? "bg-abyss-black/80 backdrop-blur-xl border-b border-brushed-steel/10 shadow-2xl shadow-black/20"
+            ? "bg-white/90 backdrop-blur-xl border-b border-border-light shadow-sm"
             : "bg-transparent"
           }
         `}
       >
-        <nav className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 h-16 md:h-[72px] flex items-center justify-between">
-          {/* ─── Logo ──────────────────────────────────────── */}
-          <a
-            href="#hero"
-            onClick={(e) => { e.preventDefault(); handleNavClick("#hero"); }}
-            className="flex items-center gap-2.5 group"
+        <nav className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px] h-16 md:h-[72px] flex items-center justify-between">
+          {/* ─── Logo — Typographic ──────────────────────────── */}
+          <Link
+            href="/"
+            className="flex items-baseline gap-1 group"
           >
-            <div className="w-8 h-8 rounded-lg bg-molten-copper/15 border border-molten-copper/25 flex items-center justify-center transition-colors duration-300 group-hover:bg-molten-copper/25">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-molten-copper">
-                <path
-                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <span className="font-display font-semibold text-titanium-white text-base tracking-tight">
+            <span className={`font-display font-bold text-xl tracking-tight transition-colors duration-500 ${scrolled ? "text-ink-black" : "text-titanium-white"}`}>
               Fragua
-              <span className="text-machine-gray/60 font-medium ml-0.5">Systems</span>
             </span>
-          </a>
+            <span className={`font-display font-light text-sm tracking-normal transition-colors duration-500 ${scrolled ? "text-soft-gray" : "text-machine-gray"}`}>
+              Systems
+            </span>
+          </Link>
 
           {/* ─── Desktop links ─────────────────────────────── */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) =>
-              link.children ? (
-                <div
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={() => handleMouseEnter(link.label)}
-                  onMouseLeave={handleMouseLeave}
+            {/* Servicios dropdown */}
+            <div
+              ref={dropdownRef}
+              className="relative"
+              onMouseEnter={handleDropdownEnter}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <button
+                onClick={() => setServiciosOpen(!serviciosOpen)}
+                className={`${linkClasses} ${linkColorClasses} inline-flex items-center gap-1 cursor-pointer`}
+              >
+                Servicios
+                <svg
+                  width="12" height="12" viewBox="0 0 24 24" fill="none"
+                  className={`transition-transform duration-200 ${serviciosOpen ? "rotate-180" : ""}`}
                 >
-                  <button
-                    className="
-                      px-4 py-2 rounded-lg
-                      text-sm font-medium text-machine-gray
-                      transition-colors duration-300
-                      hover:text-titanium-white hover:bg-forged-slate/40
-                      inline-flex items-center gap-1
-                    "
-                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                  >
-                    {link.label}
-                    <svg
-                      width="10" height="10" viewBox="0 0 24 24" fill="none"
-                      className={`transition-transform duration-200 ${openDropdown === link.label ? "rotate-180" : ""}`}
-                    >
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
 
-                  <AnimatePresence>
-                    {openDropdown === link.label && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -4, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -4, scale: 0.97 }}
-                        transition={{ duration: 0.15 }}
-                        className="
-                          absolute top-full left-0 mt-1
-                          min-w-[200px]
-                          rounded-xl
-                          bg-abyss-black/90 backdrop-blur-xl
-                          border border-brushed-steel/20
-                          shadow-xl shadow-black/30
-                          py-1.5 overflow-hidden
-                        "
+              <AnimatePresence>
+                {serviciosOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="absolute top-full left-0 mt-1 w-64 bg-white border border-border-light shadow-lg overflow-hidden"
+                  >
+                    {serviciosSubmenu.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => {
+                          handleNavClick(item.href);
+                          setServiciosOpen(false);
+                        }}
+                        className="block px-4 py-3 hover:bg-cloud-gray transition-colors group"
                       >
-                        {link.children.map((child) =>
-                          child.isPage ? (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              className="
-                                block px-4 py-2.5
-                                text-sm text-machine-gray
-                                hover:text-titanium-white hover:bg-forged-slate/40
-                                transition-colors duration-200
-                              "
-                              onClick={() => setOpenDropdown(null)}
-                            >
-                              {child.label}
-                            </Link>
-                          ) : (
-                            <a
-                              key={child.href}
-                              href={child.href}
-                              className="
-                                block px-4 py-2.5
-                                text-sm text-machine-gray
-                                hover:text-titanium-white hover:bg-forged-slate/40
-                                transition-colors duration-200
-                              "
-                              onClick={(e) => { e.preventDefault(); handleNavClick(child.href); }}
-                            >
-                              {child.label}
-                            </a>
-                          )
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                  className="
-                    px-4 py-2 rounded-lg
-                    text-sm font-medium text-machine-gray
-                    transition-colors duration-300
-                    hover:text-titanium-white hover:bg-forged-slate/40
-                  "
-                >
-                  {link.label}
-                </a>
-              )
-            )}
+                        <span className="block text-sm font-medium text-ink-black group-hover:text-molten-copper transition-colors">
+                          {item.label}
+                        </span>
+                        <span className="block text-xs text-soft-gray mt-0.5">
+                          {item.desc}
+                        </span>
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Regular nav links */}
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={(e) => {
+                  if (link.href.startsWith("/#")) {
+                    e.preventDefault();
+                    handleNavClick(link.href);
+                  }
+                }}
+                className={`${linkClasses} ${linkColorClasses}`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           {/* ─── Desktop CTA ───────────────────────────────── */}
           <div className="hidden md:block">
             <IndustrialButton
-              variant="primary"
-              href="#contacto"
-              onClick={() => handleNavClick("#contacto")}
+              variant="ghost"
+              onDark={!scrolled}
+              href="/#contacto"
               className="!px-5 !py-2.5 !text-sm"
             >
-              Solicitar Auditoría
+              Contactar
+              <svg
+                className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
             </IndustrialButton>
           </div>
 
           {/* ─── Mobile hamburger ──────────────────────────── */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex flex-col items-center justify-center w-10 h-10 rounded-lg hover:bg-forged-slate/40 transition-colors"
+            className="md:hidden flex flex-col items-center justify-center w-10 h-10 transition-colors"
             aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
           >
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className="w-5 h-px bg-titanium-white block mb-1.5"
+              className={`w-5 h-px block mb-1.5 transition-colors duration-500 ${scrolled ? "bg-ink-black" : "bg-titanium-white"}`}
             />
             <motion.span
               animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="w-5 h-px bg-titanium-white block mb-1.5"
+              className={`w-5 h-px block mb-1.5 transition-colors duration-500 ${scrolled ? "bg-ink-black" : "bg-titanium-white"}`}
             />
             <motion.span
               animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className="w-5 h-px bg-titanium-white block"
+              className={`w-5 h-px block transition-colors duration-500 ${scrolled ? "bg-ink-black" : "bg-titanium-white"}`}
             />
           </button>
         </nav>
@@ -256,44 +242,64 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-abyss-black/95 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-40 bg-white md:hidden"
           >
             <div className="flex flex-col items-center justify-center h-full gap-6">
+              {/* Servicios group */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ delay: 0 }}
+                className="flex flex-col items-center gap-2"
+              >
+                <span className="text-xs font-medium uppercase tracking-[0.15em] text-soft-gray mb-1">
+                  Servicios
+                </span>
+                {serviciosSubmenu.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => {
+                      handleNavClick(item.href);
+                      setMobileOpen(false);
+                    }}
+                    className="text-xl font-display font-semibold text-ink-black hover:text-molten-copper transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </motion.div>
+
+              {/* Divider */}
+              <div className="w-12 h-px bg-border-light" />
+
+              {/* Other nav links */}
               {navLinks.map((link, i) => (
-                <div key={link.label} className="text-center">
-                  <motion.a
+                <motion.div
+                  key={link.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ delay: (i + 1) * 0.08 }}
+                >
+                  <Link
                     href={link.href}
-                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ delay: i * 0.08 }}
-                    className="text-2xl font-display font-semibold text-titanium-white hover:text-molten-copper transition-colors"
+                    onClick={(e) => {
+                      if (link.href.startsWith("/#")) {
+                        e.preventDefault();
+                        handleNavClick(link.href);
+                      }
+                      setMobileOpen(false);
+                    }}
+                    className="text-2xl font-display font-semibold text-ink-black hover:text-molten-copper transition-colors"
                   >
                     {link.label}
-                  </motion.a>
-                  {link.children && (
-                    <div className="mt-2 space-y-1">
-                      {link.children.filter(c => c.isPage).map((child) => (
-                        <motion.div
-                          key={child.href}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.08 + 0.1 }}
-                        >
-                          <Link
-                            href={child.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="text-base text-machine-gray hover:text-molten-copper transition-colors"
-                          >
-                            ↳ {child.label}
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  </Link>
+                </motion.div>
               ))}
+
+              {/* CTA */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -303,9 +309,13 @@ export function Navbar() {
               >
                 <IndustrialButton
                   variant="primary"
-                  onClick={() => handleNavClick("#contacto")}
+                  href="/#contacto"
+                  onClick={() => {
+                    handleNavClick("/#contacto");
+                    setMobileOpen(false);
+                  }}
                 >
-                  Solicitar Auditoría
+                  Contactar →
                 </IndustrialButton>
               </motion.div>
             </div>

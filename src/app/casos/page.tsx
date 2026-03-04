@@ -110,7 +110,7 @@ const cardVariants = {
 
 export default function CasosPage() {
   return (
-    <main className="min-h-screen pt-24 md:pt-32 pb-20">
+    <main className="section-dark min-h-screen pt-24 md:pt-32 pb-20">
       {/* ─── Header ──────────────────────────────────────── */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-16">
         {/* Back link */}

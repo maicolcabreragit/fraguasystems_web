@@ -277,7 +277,7 @@ export default function ServiciosPage() {
   const totalServices = categories.reduce((acc, c) => acc + c.services.length, 0);
 
   return (
-    <main className="min-h-screen pt-24 md:pt-32 pb-20">
+    <main className="section-dark min-h-screen pt-24 md:pt-32 pb-20">
       {/* ─── Header ──────────────────────────────────────── */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-12">
         <Link

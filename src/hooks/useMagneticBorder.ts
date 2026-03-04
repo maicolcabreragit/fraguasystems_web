@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useRef, useCallback, useEffect } from "react";
 
 /* ═══════════════════════════════════════════════════════════════════
    useMagneticBorder — Reactive Illumination Engine
@@ -35,11 +35,7 @@ export function useMagneticBorder(config: MagneticConfig = {}) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const rafId = useRef<number>(0);
-  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    setIsReady(true);
-  }, []);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -118,6 +114,5 @@ export function useMagneticBorder(config: MagneticConfig = {}) {
     },
     glowStyle,
     borderGlowStyle,
-    isReady,
   };
 }
