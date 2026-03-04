@@ -7,7 +7,7 @@ import { IndustrialButton } from "@/components/ui/IndustrialButton";
 /* ═══════════════════════════════════════════════════════════════════
    ContactForm — Industrial Clean v2.0
    
-   Dark background, dark glass form card, copper CTA,
+   Light background, white form card, dark text,
    copper accent bullets, sharp corners.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -20,10 +20,10 @@ interface FormData {
 
 const inputClasses = `
   w-full px-4 py-3.5
-  bg-brushed-steel/30
-  border border-brushed-steel/40
-  text-titanium-white text-sm
-  placeholder:text-machine-gray/50
+  bg-white
+  border border-border-light
+  text-ink-black text-sm
+  placeholder:text-soft-gray/50
   focus:outline-none focus:border-molten-copper focus:ring-1 focus:ring-molten-copper/20
   transition-all duration-300
   font-body
@@ -52,7 +52,7 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contacto" className="section-dark py-24 md:py-32 border-t border-brushed-steel/30">
+    <section id="contacto" className="section-light py-24 md:py-32 border-t border-border-light">
       <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* ═══ LEFT: Copy ═══════════════════════════════════ */}
@@ -66,7 +66,7 @@ export function ContactForm() {
               <span className="inline-block w-8 h-px bg-molten-copper" aria-hidden="true" />
               Contacto Directo
             </span>
-            <h2 className="font-display font-bold text-titanium-white mb-5">
+            <h2 className="font-display font-bold text-ink-black mb-5">
               Solicite su{" "}
               <span className="text-gradient-copper">Auditoría Arquitectónica</span>
             </h2>
@@ -102,7 +102,7 @@ export function ContactForm() {
                 >
                   <span className="w-1.5 h-1.5 bg-molten-copper flex-shrink-0 mt-2" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-medium text-titanium-white mb-0.5">{item.title}</p>
+                    <p className="text-sm font-medium text-ink-black mb-0.5">{item.title}</p>
                     <p className="text-sm text-soft-gray">{item.desc}</p>
                   </div>
                 </motion.div>
@@ -117,7 +117,7 @@ export function ContactForm() {
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.15 }}
           >
-            <div className="bg-forged-slate/80 border border-brushed-steel/30 p-8 md:p-10 shadow-sm">
+            <div className="bg-white border border-border-light p-8 md:p-10 shadow-sm">
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Name */}
@@ -227,7 +227,7 @@ export function ContactForm() {
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
                     </svg>
                   </div>
-                  <h3 className="font-display font-semibold text-xl text-titanium-white mb-2">
+                  <h3 className="font-display font-semibold text-xl text-ink-black mb-2">
                     Solicitud recibida
                   </h3>
                   <p className="text-soft-gray text-sm leading-relaxed max-w-xs mx-auto">

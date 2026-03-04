@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 
 export function AboutUs() {
   return (
-    <section id="nosotros" className="section-dark py-24 md:py-32 border-t border-brushed-steel/30">
+    <section id="nosotros" className="section-light py-24 md:py-32 border-t border-border-light">
       <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px]">
         {/* ─── Two-column layout ──────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -47,7 +47,7 @@ export function AboutUs() {
             </span>
 
             <h2
-              className="font-display font-bold text-titanium-white mb-8 leading-tight"
+              className="font-display font-bold text-ink-black mb-8 leading-tight"
               style={{ fontSize: "clamp(1.75rem, 3vw, 2.75rem)" }}
             >
               Ingenieros que entienden{" "}
@@ -58,8 +58,8 @@ export function AboutUs() {
             <div className="space-y-5 text-soft-gray leading-relaxed">
               <p>
                 Somos un equipo de ingeniería de software especializado exclusivamente en el sector{" "}
-                <strong className="text-titanium-white font-medium">HORECA</strong>. No hacemos webs genéricas
-                — construimos <strong className="text-titanium-white font-medium">infraestructuras digitales de misión crítica</strong>{" "}
+                <strong className="text-ink-black font-medium">HORECA</strong>. No hacemos webs genéricas
+                — construimos <strong className="text-ink-black font-medium">infraestructuras digitales de misión crítica</strong>{" "}
                 para hoteles, restaurantes y grupos de hostelería que necesitan resultados medibles.
               </p>
 
@@ -73,7 +73,7 @@ export function AboutUs() {
             </div>
 
             {/* ── Stats — Giant numbers (Stimulo-style) ─────── */}
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-brushed-steel/30 pt-10">
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border-light pt-10">
               {[
                 { value: "100+", label: "Servicios especializados" },
                 { value: "100%", label: "Sector HORECA" },
@@ -87,7 +87,7 @@ export function AboutUs() {
                   transition={{ delay: 0.3 + i * 0.1, type: "spring", stiffness: 200, damping: 22 }}
                 >
                   <div
-                    className="font-display font-bold text-titanium-white mb-1"
+                    className="font-display font-bold text-ink-black mb-1"
                     style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}
                   >
                     {item.value}

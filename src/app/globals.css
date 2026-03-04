@@ -142,7 +142,7 @@ html {
 }
 
 body {
-  background-color: var(--color-abyss-black);
+  background-color: var(--color-cloud-gray);
   color: var(--color-ink-black);
   font-family:
     var(--font-body),
