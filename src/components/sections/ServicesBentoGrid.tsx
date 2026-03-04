@@ -69,7 +69,7 @@ const itemVariants = {
 
 export function ServicesBentoGrid() {
   return (
-    <section id="servicios" className="section-light py-24 md:py-32">
+    <section id="servicios" className="section-dark py-24 md:py-32">
       {/* ─── Section Header — Centered ──────────────────── */}
       <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px] mb-16">
         <motion.div
@@ -111,15 +111,15 @@ export function ServicesBentoGrid() {
             >
               <div className="
                 h-full
-                bg-white border border-border-light
+                bg-forged-slate/60 border border-brushed-steel/30
                 p-8
                 transition-all duration-300
-                hover:border-ink-black/20
-                hover:shadow-md
+                hover:border-molten-copper/40
+                hover:shadow-md hover:shadow-molten-copper/5
                 group
               ">
                 {/* Icon */}
-                <div className="mb-6 text-ink-black group-hover:text-molten-copper transition-colors duration-300">
+                <div className="mb-6 text-machine-gray group-hover:text-molten-copper transition-colors duration-300">
                   {svc.icon}
                 </div>
 
@@ -155,7 +155,7 @@ export function ServicesBentoGrid() {
           </p>
           <Link
             href="/servicios"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-ink-black border-[1.5px] border-ink-black hover:bg-ink-black hover:text-white transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-titanium-white border-[1.5px] border-titanium-white hover:bg-titanium-white hover:text-abyss-black transition-all duration-300 group"
           >
             Ver todos los servicios
             <svg
