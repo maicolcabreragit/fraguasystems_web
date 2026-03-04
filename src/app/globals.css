@@ -1,9 +1,8 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   FRAGUA SYSTEMS — Design System Tokens
-   Source of Truth: fragua_systems_prd_techspec.md v1.0
-   Aesthetic: "Dark Corporate" + "Industrial Luxe"
+   FRAGUA SYSTEMS — Design System Tokens v2.0
+   "Industrial Clean" — Stimulo-derived × HORECA B2B Authority
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ─── Color Tokens (CSS Custom Properties) ──────────────────────── */
@@ -16,6 +15,13 @@
   --color-machine-gray: #8a9197;
   --color-molten-copper: #c86a3d;
   --color-industrial-gold: #d4af37;
+
+  /* NEW — Light Mode Palette (Stimulo-derived) */
+  --color-cloud-gray: #f5f5f5;
+  --color-warm-white: #fafafa;
+  --color-ink-black: #1a1a1a;
+  --color-soft-gray: #555555;
+  --color-border-light: #e0e0e0;
 
   /* Semantic Aliases */
   --background: var(--color-abyss-black);
@@ -37,6 +43,13 @@
   --color-machine-gray: var(--color-machine-gray);
   --color-molten-copper: var(--color-molten-copper);
   --color-industrial-gold: var(--color-industrial-gold);
+
+  /* Light Mode Palette */
+  --color-cloud-gray: var(--color-cloud-gray);
+  --color-warm-white: var(--color-warm-white);
+  --color-ink-black: var(--color-ink-black);
+  --color-soft-gray: var(--color-soft-gray);
+  --color-border-light: var(--color-border-light);
 
   /* Semantic */
   --color-background: var(--background);
@@ -61,10 +74,10 @@
   --spacing-12: 6rem; /* 96px */
   --spacing-16: 8rem; /* 128px */
 
-  /* — Border Radius — */
-  --radius-glass: 1rem; /* 16px — Card standard */
-  --radius-glass-lg: 1.5rem; /* 24px — Feature cards */
-  --radius-button: 0.75rem; /* 12px — CTA buttons */
+  /* — Border Radius — Industrial Clean: 0px everywhere — */
+  --radius-glass: 0px;
+  --radius-glass-lg: 0px;
+  --radius-button: 0px;
 
   /* — Animations — */
   --animate-shimmer: shimmer 2.5s ease-in-out infinite;
@@ -129,8 +142,8 @@ html {
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-abyss-black);
+  color: var(--color-ink-black);
   font-family:
     var(--font-body),
     "Inter",
@@ -143,20 +156,14 @@ body {
   position: relative;
 }
 
-/* ─── Film Grain Noise Texture ──────────────────────────────────
-   Pure-CSS SVG feTurbulence approach.
-   - Zero external requests (inline data URI)
-   - Zero layout shift
-   - GPU-composited (will-change + transform)
-   - ~3% opacity = subliminal tactile quality
-   ────────────────────────────────────────────────────────────────── */
+/* ─── Film Grain Noise Texture — reduced to subliminal ─────────── */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.02;
   mix-blend-mode: overlay;
   background-image: url("/noise.svg");
   background-repeat: repeat;
@@ -172,7 +179,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display), "IBM Plex Sans", system-ui, sans-serif;
-  color: var(--foreground);
+  color: var(--color-ink-black);
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
@@ -201,15 +208,40 @@ textarea {
   font-family: var(--font-body), "Inter", system-ui, sans-serif;
 }
 
+/* ─── Section Modes (Light / Dark) ─────────────────────────────── */
+.section-dark {
+  background-color: var(--color-abyss-black);
+  color: var(--color-titanium-white);
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  color: var(--color-titanium-white);
+}
+
+.section-light {
+  background-color: var(--color-cloud-gray);
+  color: var(--color-ink-black);
+}
+
+.section-light h1,
+.section-light h2,
+.section-light h3,
+.section-light h4 {
+  color: var(--color-ink-black);
+}
+
 /* ─── Selection ─────────────────────────────────────────────────── */
 ::selection {
   background-color: var(--color-molten-copper);
-  color: var(--color-titanium-white);
+  color: #ffffff;
 }
 
 ::-moz-selection {
   background-color: var(--color-molten-copper);
-  color: var(--color-titanium-white);
+  color: #ffffff;
 }
 
 /* ─── Scrollbar (Webkit) ────────────────────────────────────────── */
@@ -218,7 +250,7 @@ textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-abyss-black);
+  background: var(--color-cloud-gray);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -232,13 +264,12 @@ textarea {
 
 /* ─── Utility Classes ───────────────────────────────────────────── */
 
-/* Glassmorphism Structural — "Liquid Glass" */
+/* Glass panel — now sharp corners */
 .glass {
   background: rgba(31, 35, 43, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(46, 53, 66, 0.5);
-  border-radius: var(--radius-glass);
 }
 
 .glass-lg {
@@ -246,19 +277,6 @@ textarea {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(46, 53, 66, 0.5);
-  border-radius: var(--radius-glass-lg);
-}
-
-/* Shimmer gradient overlay — apply to CTA buttons */
-.shimmer {
-  background: linear-gradient(
-    110deg,
-    transparent 25%,
-    rgba(200, 106, 61, 0.12) 37%,
-    transparent 63%
-  );
-  background-size: 400% 100%;
-  animation: var(--animate-shimmer);
 }
 
 /* Text gradient — for premium display text */
