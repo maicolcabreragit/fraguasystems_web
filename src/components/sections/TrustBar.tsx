@@ -1,126 +1,58 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { TrustBadge } from "@/components/ui/TrustBadge";
 
 /* ═══════════════════════════════════════════════════════════════════
-   TrustBar — Institutional Validation Layer
-
-   Certifications and compliance badges ONLY.
-   No fake client logos — real credibility only.
+   TrustBar — Industrial Clean v2.0
+   
+   Light background, monochromatic badges, regulatory seals.
    ═══════════════════════════════════════════════════════════════════ */
 
-const certifications = [
-  {
-    icon: "⬡",
-    label: "VeriFactu Ready",
-    sublabel: "Certificado 2026/2027",
-  },
-  {
-    icon: "◈",
-    label: "SES.Hospedajes",
-    sublabel: "Integración Oficial",
-  },
-  {
-    icon: "◇",
-    label: "GDPR Europa",
-    sublabel: "Servidores en Alemania",
-  },
-  {
-    icon: "⬢",
-    label: "PCI-DSS",
-    sublabel: "Pagos Tokenizados",
-  },
-];
-
-const techStack = [
-  "Next.js",
-  "React",
-  "Node.js",
-  "PostgreSQL",
-  "Stripe API",
-  "Hetzner Cloud",
-  "Vercel",
-  "OpenAI",
+const badges = [
+  { label: "VeriFactu Ready", sublabel: "2026/2027" },
+  { label: "SES.Hospedajes", sublabel: "Integración Oficial" },
+  { label: "RGPD", sublabel: "Servidores EU" },
+  { label: "SOC 2", sublabel: "Compliant" },
 ];
 
 export function TrustBar() {
   return (
-    <section
-      id="trust"
-      className="relative py-16 md:py-20 border-t border-b border-brushed-steel/15"
-    >
-      {/* Subtle top/bottom gradient fade */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            linear-gradient(180deg, rgba(14,15,18,0.8) 0%, transparent 20%, transparent 80%, rgba(14,15,18,0.8) 100%)
-          `,
-        }}
-        aria-hidden="true"
-      />
+    <section className="section-light py-16 md:py-20 border-b border-border-light">
+      <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px]">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center"
+        >
+          {/* Label */}
+          <p className="text-xs uppercase tracking-[0.2em] text-soft-gray mb-10 font-medium">
+            Certificaciones y cumplimiento
+          </p>
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-        {/* ─── Certification Badges ────────────────────────── */}
-        <div className="flex flex-col items-center mb-14">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-xs font-medium uppercase tracking-[0.25em] text-machine-gray/60 mb-6"
-          >
-            Certificaciones y Cumplimiento Normativo
-          </motion.p>
-
-          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            {certifications.map((cert, i) => (
-              <TrustBadge
-                key={cert.label}
-                icon={cert.icon}
-                label={cert.label}
-                sublabel={cert.sublabel}
-                delay={i * 0.08}
-              />
+          {/* Badges Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 w-full max-w-3xl">
+            {badges.map((badge, i) => (
+              <motion.div
+                key={badge.label}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, type: "spring", stiffness: 200, damping: 22 }}
+                className="text-center"
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 mb-3 border border-border-light bg-white">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-molten-copper">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <p className="text-sm font-display font-semibold text-ink-black">{badge.label}</p>
+                <p className="text-xs text-soft-gray mt-0.5">{badge.sublabel}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
-
-        {/* ─── Divider ─────────────────────────────────────── */}
-        <div className="flex items-center gap-4 mb-10">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-brushed-steel/30 to-transparent" />
-          <span className="text-xs text-machine-gray/40 uppercase tracking-[0.2em]">
-            Stack Tecnológico
-          </span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-brushed-steel/30 to-transparent" />
-        </div>
-
-        {/* ─── Tech Stack Tags ─────────────────────────────── */}
-        <div className="flex flex-wrap justify-center items-center gap-3">
-          {techStack.map((tech, i) => (
-            <motion.span
-              key={tech}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{
-                type: "spring",
-                stiffness: 250,
-                damping: 22,
-                delay: 0.3 + i * 0.05,
-              }}
-              className="
-                px-4 py-2 rounded-lg text-xs font-medium tracking-wide
-                text-machine-gray/70 border border-brushed-steel/15
-                bg-forged-slate/20 hover:border-molten-copper/30
-                hover:text-titanium-white transition-all duration-300
-              "
-            >
-              {tech}
-            </motion.span>
-          ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

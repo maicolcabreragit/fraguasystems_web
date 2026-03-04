@@ -51,6 +51,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Fragua Systems" }],
   creator: "Fragua Systems",
   metadataBase: new URL("https://fraguasystems.com"),
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "es_ES",
@@ -58,18 +65,16 @@ export const metadata: Metadata = {
     title: "Fragua Systems — Ingeniería de Software Pesada para el Sector HORECA",
     description:
       "Automatización integral de PMS, canales de venta directa y cumplimiento VeriFactu y SES.Hospedajes para hoteles y restaurantes.",
+    images: [{ url: "/brand/icon-512.png", width: 512, height: 512, alt: "Fragua Systems" }],
   },
   robots: {
     index: true,
     follow: true,
   },
-  icons: {
-    icon: "/favicon.png",
-  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E0F12",
+  themeColor: "#f5f5f5",
   width: "device-width",
   initialScale: 1,
 };

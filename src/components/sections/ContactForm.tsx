@@ -5,13 +5,10 @@ import { motion } from "framer-motion";
 import { IndustrialButton } from "@/components/ui/IndustrialButton";
 
 /* ═══════════════════════════════════════════════════════════════════
-   ContactForm — Lead Capture for B2B High-Ticket
+   ContactForm — Industrial Clean v2.0
    
-   Minimalist form for CEO-level prospects:
-   - Name, Email, Hotel/Company, Message
-   - Glassmorphism card (Liquid Glass)
-   - Success state with confirmation
-   - No unnecessary fields — reduce friction
+   Light background, white form card, black CTA,
+   copper accent bullets, sharp corners.
    ═══════════════════════════════════════════════════════════════════ */
 
 interface FormData {
@@ -23,12 +20,11 @@ interface FormData {
 
 const inputClasses = `
   w-full px-4 py-3.5
-  bg-abyss-black/60
-  border border-brushed-steel/25
-  rounded-button
-  text-titanium-white text-sm
-  placeholder:text-machine-gray/40
-  focus:outline-none focus:border-molten-copper/50 focus:ring-1 focus:ring-molten-copper/20
+  bg-white
+  border border-border-light
+  text-ink-black text-sm
+  placeholder:text-soft-gray/50
+  focus:outline-none focus:border-molten-copper focus:ring-1 focus:ring-molten-copper/20
   transition-all duration-300
   font-body
 `;
@@ -46,7 +42,6 @@ export function ContactForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSending(true);
-    // Simulate API call — will be connected to a real endpoint
     await new Promise((resolve) => setTimeout(resolve, 1500));
     setSending(false);
     setSubmitted(true);
@@ -57,8 +52,8 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contacto" className="relative py-24 md:py-32">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
+    <section id="contacto" className="section-light py-24 md:py-32 border-t border-border-light">
+      <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* ═══ LEFT: Copy ═══════════════════════════════════ */}
           <motion.div
@@ -71,11 +66,11 @@ export function ContactForm() {
               <span className="inline-block w-8 h-px bg-molten-copper" aria-hidden="true" />
               Contacto Directo
             </span>
-            <h2 className="font-display font-bold text-titanium-white mb-5">
+            <h2 className="font-display font-bold text-ink-black mb-5">
               Solicite su{" "}
               <span className="text-gradient-copper">Auditoría Arquitectónica</span>
             </h2>
-            <p className="text-lg text-machine-gray leading-relaxed mb-10">
+            <p className="text-lg text-soft-gray leading-relaxed mb-10">
               Analizamos su infraestructura tecnológica actual y le entregamos un
               plan detallado de migración con ROI proyectado. Sin compromiso,
               sin letra pequeña.
@@ -85,17 +80,14 @@ export function ContactForm() {
             <div className="space-y-5">
               {[
                 {
-                  icon: "◆",
                   title: "Diagnóstico de infraestructura",
                   desc: "Auditoría completa de su PMS, canales de venta y compliance.",
                 },
                 {
-                  icon: "◆",
                   title: "Plan de migración a medida",
                   desc: "Hoja de ruta técnica con fases, plazos y costes transparentes.",
                 },
                 {
-                  icon: "◆",
                   title: "Proyección de ROI verificable",
                   desc: "Cifras concretas de ahorro en comisiones y reducción de OPEX.",
                 },
@@ -108,10 +100,10 @@ export function ContactForm() {
                   transition={{ delay: 0.2 + i * 0.1 }}
                   className="flex items-start gap-3"
                 >
-                  <span className="text-molten-copper text-xs mt-1 flex-shrink-0">{item.icon}</span>
+                  <span className="w-1.5 h-1.5 bg-molten-copper flex-shrink-0 mt-2" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-medium text-titanium-white mb-0.5">{item.title}</p>
-                    <p className="text-sm text-machine-gray">{item.desc}</p>
+                    <p className="text-sm font-medium text-ink-black mb-0.5">{item.title}</p>
+                    <p className="text-sm text-soft-gray">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -125,12 +117,12 @@ export function ContactForm() {
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.15 }}
           >
-            <div className="glass-lg p-8 md:p-10">
+            <div className="bg-white border border-border-light p-8 md:p-10 shadow-sm">
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Name */}
                   <div>
-                    <label htmlFor="cf-name" className="block text-xs font-medium text-machine-gray mb-2 uppercase tracking-wider">
+                    <label htmlFor="cf-name" className="block text-xs font-medium text-soft-gray mb-2 uppercase tracking-wider">
                       Nombre completo
                     </label>
                     <input
@@ -146,7 +138,7 @@ export function ContactForm() {
 
                   {/* Email */}
                   <div>
-                    <label htmlFor="cf-email" className="block text-xs font-medium text-machine-gray mb-2 uppercase tracking-wider">
+                    <label htmlFor="cf-email" className="block text-xs font-medium text-soft-gray mb-2 uppercase tracking-wider">
                       Email corporativo
                     </label>
                     <input
@@ -162,7 +154,7 @@ export function ContactForm() {
 
                   {/* Company */}
                   <div>
-                    <label htmlFor="cf-company" className="block text-xs font-medium text-machine-gray mb-2 uppercase tracking-wider">
+                    <label htmlFor="cf-company" className="block text-xs font-medium text-soft-gray mb-2 uppercase tracking-wider">
                       Hotel / Restaurante / Grupo
                     </label>
                     <input
@@ -171,14 +163,14 @@ export function ContactForm() {
                       required
                       value={formData.company}
                       onChange={(e) => handleChange("company", e.target.value)}
-                      placeholder="Ej: Grand Pirineos Hotel & Spa / Restaurante Cal Xirlu"
+                      placeholder="Ej: Grand Pirineos Hotel & Spa"
                       className={inputClasses}
                     />
                   </div>
 
                   {/* Message */}
                   <div>
-                    <label htmlFor="cf-message" className="block text-xs font-medium text-machine-gray mb-2 uppercase tracking-wider">
+                    <label htmlFor="cf-message" className="block text-xs font-medium text-soft-gray mb-2 uppercase tracking-wider">
                       ¿Cuál es su mayor desafío operativo?
                     </label>
                     <textarea
@@ -193,24 +185,29 @@ export function ContactForm() {
 
                   {/* Submit */}
                   <div className="pt-2">
-                    <IndustrialButton variant="primary" className="w-full !justify-center">
+                    <IndustrialButton variant="primary" className="w-full !justify-center" type="submit">
                       {sending ? (
                         <span className="flex items-center gap-2">
                           <motion.span
                             animate={{ rotate: 360 }}
                             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                            className="inline-block w-4 h-4 border-2 border-titanium-white/30 border-t-titanium-white rounded-full"
+                            className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                           />
                           Procesando...
                         </span>
                       ) : (
-                        "Solicitar Auditoría Gratuita"
+                        <>
+                          Solicitar Auditoría Gratuita
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                          </svg>
+                        </>
                       )}
                     </IndustrialButton>
                   </div>
 
                   {/* Privacy note */}
-                  <p className="text-[11px] text-machine-gray/40 text-center leading-relaxed pt-1">
+                  <p className="text-[11px] text-soft-gray/60 text-center leading-relaxed pt-1">
                     Sus datos están protegidos bajo el RGPD.
                     Servidores en Europa (Hetzner, Alemania).
                     No compartimos información con terceros.
@@ -224,16 +221,16 @@ export function ContactForm() {
                   transition={{ type: "spring", stiffness: 200, damping: 20 }}
                   className="text-center py-12"
                 >
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-emerald-400">
+                  <div className="w-16 h-16 mx-auto mb-6 border border-emerald-500/30 flex items-center justify-center">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-emerald-500">
                       <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
                     </svg>
                   </div>
-                  <h3 className="font-display font-semibold text-xl text-titanium-white mb-2">
+                  <h3 className="font-display font-semibold text-xl text-ink-black mb-2">
                     Solicitud recibida
                   </h3>
-                  <p className="text-machine-gray text-sm leading-relaxed max-w-xs mx-auto">
+                  <p className="text-soft-gray text-sm leading-relaxed max-w-xs mx-auto">
                     Nuestro equipo de ingeniería revisará su caso y le contactará
                     en un plazo máximo de 24 horas laborables.
                   </p>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { IndustrialButton } from "@/components/ui/IndustrialButton";
 
@@ -109,17 +110,28 @@ export function Navbar() {
         `}
       >
         <nav className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px] h-16 md:h-[72px] flex items-center justify-between">
-          {/* ─── Logo — Typographic ──────────────────────────── */}
+          {/* ─── Logo — Image + Text ────────────────────────── */}
           <Link
             href="/"
-            className="flex items-baseline gap-1 group"
+            className="flex items-center gap-2.5 group"
           >
-            <span className={`font-display font-bold text-xl tracking-tight transition-colors duration-500 ${scrolled ? "text-ink-black" : "text-titanium-white"}`}>
-              Fragua
-            </span>
-            <span className={`font-display font-light text-sm tracking-normal transition-colors duration-500 ${scrolled ? "text-soft-gray" : "text-machine-gray"}`}>
-              Systems
-            </span>
+            <Image
+              src="/brand/logo.png"
+              alt="Fragua Systems"
+              width={36}
+              height={36}
+              className="transition-all duration-500"
+              priority
+              unoptimized
+            />
+            <div className="flex items-baseline gap-1">
+              <span className={`font-display font-bold text-xl tracking-tight transition-colors duration-500 ${scrolled ? "text-ink-black" : "text-titanium-white"}`}>
+                Fragua
+              </span>
+              <span className={`font-display font-light text-sm tracking-normal transition-colors duration-500 ${scrolled ? "text-soft-gray" : "text-machine-gray"}`}>
+                Systems
+              </span>
+            </div>
           </Link>
 
           {/* ─── Desktop links ─────────────────────────────── */}
