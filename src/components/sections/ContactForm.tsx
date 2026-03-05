@@ -38,13 +38,34 @@ export function ContactForm() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSending(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setSending(false);
-    setSubmitted(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Error al enviar. Inténtelo de nuevo.");
+        setSending(false);
+        return;
+      }
+
+      setSending(false);
+      setSubmitted(true);
+    } catch {
+      setError("Error de conexión. Inténtelo de nuevo.");
+      setSending(false);
+    }
   };
 
   const handleChange = (field: keyof FormData, value: string) => {
@@ -182,6 +203,13 @@ export function ContactForm() {
                       className={`${inputClasses} resize-none`}
                     />
                   </div>
+
+                  {/* Error message */}
+                  {error && (
+                    <div className="p-3 border border-red-400/30 bg-red-50 text-red-700 text-sm rounded">
+                      {error}
+                    </div>
+                  )}
 
                   {/* Submit */}
                   <div className="pt-2">
