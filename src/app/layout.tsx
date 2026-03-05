@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/sections/Navbar";
+import { ChatWidget } from "@/components/ChatWidget";
 
 /* ═══════════════════════════════════════════════════════════════════
    Fragua Systems — Dual Typography System
@@ -90,6 +91,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Navbar />
         {children}
+        <ChatWidget />
       </body>
     </html>
   );
