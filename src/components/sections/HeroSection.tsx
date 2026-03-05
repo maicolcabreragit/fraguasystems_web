@@ -52,10 +52,20 @@ const itemVariants = {
 export function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const activeRef = useRef(0);
 
-  // Advance to next video when current one ends (smooth crossfade)
-  const handleVideoEnded = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+  // Handle video end: pause it immediately, then advance
+  const handleVideoEnded = useCallback((videoIndex: number) => {
+    const video = videoRefs.current[videoIndex];
+    if (video) {
+      video.pause(); // Prevent any restart flicker
+    }
+    // Only advance if this was the active video
+    if (videoIndex === activeRef.current) {
+      const next = (videoIndex + 1) % HERO_VIDEOS.length;
+      activeRef.current = next;
+      setActiveIndex(next);
+    }
   }, []);
 
   // Play active video, pause others
@@ -73,7 +83,6 @@ export function HeroSection() {
 
   const setVideoRef = useCallback((el: HTMLVideoElement | null, i: number) => {
     videoRefs.current[i] = el;
-    // Autoplay the first video as soon as it mounts
     if (el && i === 0 && el.paused) {
       el.play().catch(() => {});
     }
@@ -97,7 +106,7 @@ export function HeroSection() {
               muted
               playsInline
               preload="auto"
-              onEnded={i === activeIndex ? handleVideoEnded : undefined}
+              onEnded={() => handleVideoEnded(i)}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
                 i === activeIndex ? "opacity-100" : "opacity-0"
               }`}
