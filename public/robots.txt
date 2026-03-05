@@ -1,0 +1,9 @@
+# Fragua Systems — robots.txt
+# https://www.fraguasystems.com
+
+User-agent: *
+Allow: /
+Disallow: /area-clientes/
+Disallow: /api/
+
+Sitemap: https://www.fraguasystems.com/sitemap.xml
