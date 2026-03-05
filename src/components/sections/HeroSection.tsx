@@ -1,14 +1,30 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { IndustrialButton } from "@/components/ui/IndustrialButton";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HeroSection — Industrial Clean v2.0 (Stimulo-inspired)
+   HeroSection — Industrial Clean v3.0
    
-   Full-viewport dark section with centered massive typography.
-   No grid split — pure typographic impact.
+   Full-viewport dark section with:
+   - Background video rotation (if videos exist)
+   - Crossfade transitions between clips
+   - Dark overlay for text legibility
+   - Fallback to ambient glow if no videos
    ═══════════════════════════════════════════════════════════════════ */
+
+// Videos in public/hero-videos/ — add or remove as needed.
+// The component auto-detects which ones exist.
+const HERO_VIDEOS = [
+  "/hero-videos/hero_hotel_lobby.mp4",
+  "/hero-videos/hero_kitchen_copper.mp4",
+  "/hero-videos/hero_server_corridor.mp4",
+  "/hero-videos/hero_restaurant_evening.mp4",
+  "/hero-videos/hero_copper_abstract.mp4",
+];
+
+const ROTATION_INTERVAL = 10000; // 10s per video
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -35,21 +51,108 @@ const itemVariants = {
 };
 
 export function HeroSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [availableVideos, setAvailableVideos] = useState<string[]>([]);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  // Check which videos actually exist
+  useEffect(() => {
+    const checkVideos = async () => {
+      const existing: string[] = [];
+      for (const src of HERO_VIDEOS) {
+        try {
+          const res = await fetch(src, { method: "HEAD" });
+          if (res.ok) existing.push(src);
+        } catch {
+          // Video doesn't exist, skip
+        }
+      }
+      setAvailableVideos(existing);
+    };
+    checkVideos();
+  }, []);
+
+  // Rotate videos
+  useEffect(() => {
+    if (availableVideos.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % availableVideos.length);
+    }, ROTATION_INTERVAL);
+    return () => clearInterval(timer);
+  }, [availableVideos.length]);
+
+  // Play active video
+  useEffect(() => {
+    videoRefs.current.forEach((video, i) => {
+      if (!video) return;
+      if (i === activeIndex) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, [activeIndex]);
+
+  const setVideoRef = useCallback((el: HTMLVideoElement | null, i: number) => {
+    videoRefs.current[i] = el;
+  }, []);
+
+  const hasVideos = availableVideos.length > 0;
+
   return (
     <section
       id="hero"
       className="section-dark relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* ─── Subtle ambient glow ──────────────────────────── */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(ellipse 60% 50% at 50% 50%, rgba(200,106,61,0.06) 0%, transparent 70%)
-          `,
-        }}
-        aria-hidden="true"
-      />
+      {/* ─── Video Background (if videos exist) ──────────── */}
+      {hasVideos && (
+        <div className="absolute inset-0 z-0">
+          {availableVideos.map((src, i) => (
+            <video
+              key={src}
+              ref={(el) => setVideoRef(el, i)}
+              src={src}
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
+                i === activeIndex ? "opacity-100" : "opacity-0"
+              }`}
+              aria-hidden="true"
+            />
+          ))}
+          {/* Dark overlay for text legibility */}
+          <div
+            className="absolute inset-0 z-[1]"
+            style={{
+              background: `
+                linear-gradient(180deg, 
+                  rgba(14,15,18,0.75) 0%, 
+                  rgba(14,15,18,0.50) 40%, 
+                  rgba(14,15,18,0.60) 70%, 
+                  rgba(14,15,18,0.85) 100%
+                )
+              `,
+            }}
+            aria-hidden="true"
+          />
+        </div>
+      )}
+
+      {/* ─── Fallback: Subtle ambient glow (no videos) ──── */}
+      {!hasVideos && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              radial-gradient(ellipse 60% 50% at 50% 50%, rgba(200,106,61,0.06) 0%, transparent 70%)
+            `,
+          }}
+          aria-hidden="true"
+        />
+      )}
 
       {/* ─── Content — Centered ──────────────────────────── */}
       <motion.div
@@ -129,6 +232,24 @@ export function HeroSection() {
           </span>
         </motion.div>
       </motion.div>
+
+      {/* ─── Video indicator dots (if multiple videos) ──── */}
+      {availableVideos.length > 1 && (
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+          {availableVideos.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+                i === activeIndex
+                  ? "bg-molten-copper w-6"
+                  : "bg-machine-gray/30 hover:bg-machine-gray/50"
+              }`}
+              aria-label={`Video ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* ─── Scroll indicator ────────────────────────────── */}
       <motion.div
