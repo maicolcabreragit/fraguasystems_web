@@ -53,15 +53,16 @@ export function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const activeRef = useRef(0);
+  const transitioned = useRef(false);
 
-  // Handle video end: pause it immediately, then advance
-  const handleVideoEnded = useCallback((videoIndex: number) => {
+  // Transition 0.5s BEFORE the video ends — crossfade starts while clip still plays
+  const handleTimeUpdate = useCallback((videoIndex: number) => {
+    if (videoIndex !== activeRef.current) return;
     const video = videoRefs.current[videoIndex];
-    if (video) {
-      video.pause(); // Prevent any restart flicker
-    }
-    // Only advance if this was the active video
-    if (videoIndex === activeRef.current) {
+    if (!video || transitioned.current) return;
+
+    if (video.duration && video.currentTime >= video.duration - 0.5) {
+      transitioned.current = true;
       const next = (videoIndex + 1) % HERO_VIDEOS.length;
       activeRef.current = next;
       setActiveIndex(next);
@@ -70,13 +71,15 @@ export function HeroSection() {
 
   // Play active video, pause others
   useEffect(() => {
+    transitioned.current = false;
     videoRefs.current.forEach((video, i) => {
       if (!video) return;
       if (i === activeIndex) {
         video.currentTime = 0;
         video.play().catch(() => {});
       } else {
-        video.pause();
+        // Small delay before pausing to allow crossfade overlap
+        setTimeout(() => video.pause(), 2000);
       }
     });
   }, [activeIndex]);
@@ -106,7 +109,7 @@ export function HeroSection() {
               muted
               playsInline
               preload="auto"
-              onEnded={() => handleVideoEnded(i)}
+              onTimeUpdate={() => handleTimeUpdate(i)}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
                 i === activeIndex ? "opacity-100" : "opacity-0"
               }`}
