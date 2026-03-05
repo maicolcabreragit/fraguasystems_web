@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   ServicesBentoGrid — Industrial Clean v2.0 (Stimulo Projects-style)
+   ServicesBentoGrid — Industrial Clean v2.1
    
-   Light background, 3-column grid, clean cards with icons,
-   sharp corners, centered header.
+   Mobile: horizontal snap-scroll carousel with arrow navigation
+   Desktop: 3-column grid (unchanged)
    ═══════════════════════════════════════════════════════════════════ */
 
 interface ServiceCard {
@@ -68,6 +69,36 @@ const itemVariants = {
 };
 
 export function ServicesBentoGrid() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateArrows = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateArrows();
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    window.addEventListener("resize", updateArrows);
+    return () => {
+      el.removeEventListener("scroll", updateArrows);
+      window.removeEventListener("resize", updateArrows);
+    };
+  }, [updateArrows]);
+
+  const scroll = useCallback((dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.firstElementChild?.clientWidth || 280;
+    el.scrollBy({ left: dir === "left" ? -cardWidth - 20 : cardWidth + 20, behavior: "smooth" });
+  }, []);
+
   return (
     <section id="servicios" className="section-light py-24 md:py-32">
       {/* ─── Section Header — Centered ──────────────────── */}
@@ -95,19 +126,60 @@ export function ServicesBentoGrid() {
         </motion.div>
       </div>
 
-      {/* ─── 3-Column Grid ──────────────────────────────── */}
-      <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px]">
+      {/* ─── Cards: Horizontal scroll mobile, grid desktop ── */}
+      <div className="max-w-[1860px] mx-auto px-6 md:px-12 lg:px-[30px] relative">
+        {/* Navigation arrows (mobile only) */}
+        <div className="flex md:hidden justify-end gap-2 mb-4">
+          <button
+            onClick={() => scroll("left")}
+            disabled={!canScrollLeft}
+            className={`w-9 h-9 flex items-center justify-center border transition-all duration-200 ${
+              canScrollLeft
+                ? "border-ink-black/30 text-ink-black hover:bg-ink-black hover:text-white active:scale-95"
+                : "border-border-light text-border-light cursor-default"
+            }`}
+            aria-label="Anterior servicio"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            disabled={!canScrollRight}
+            className={`w-9 h-9 flex items-center justify-center border transition-all duration-200 ${
+              canScrollRight
+                ? "border-ink-black/30 text-ink-black hover:bg-ink-black hover:text-white active:scale-95"
+                : "border-border-light text-border-light cursor-default"
+            }`}
+            aria-label="Siguiente servicio"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </div>
+
         <motion.div
+          ref={scrollRef}
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="
+            flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-5
+            overflow-x-auto md:overflow-visible
+            snap-x snap-mandatory md:snap-none
+            -mx-6 px-6 md:mx-0 md:px-0
+            pb-2 md:pb-0
+          "
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
         >
           {services.map((svc, i) => (
             <motion.div
               key={i}
               variants={itemVariants}
+              className="min-w-[80%] sm:min-w-[55%] md:min-w-0 snap-center shrink-0 md:shrink"
             >
               <div className="
                 h-full
