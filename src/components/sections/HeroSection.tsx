@@ -17,6 +17,7 @@ import { IndustrialButton } from "@/components/ui/IndustrialButton";
 // Videos in public/hero-videos/ — add or remove as needed.
 // The component auto-detects which ones exist.
 const HERO_VIDEOS = [
+  "/hero-videos/hero_startup_planning.mp4",
   "/hero-videos/hero_hotel_lobby.mp4",
   "/hero-videos/hero_kitchen_copper.mp4",
   "/hero-videos/hero_server_corridor.mp4",
@@ -129,10 +130,10 @@ export function HeroSection() {
             style={{
               background: `
                 linear-gradient(180deg, 
-                  rgba(14,15,18,0.75) 0%, 
-                  rgba(14,15,18,0.50) 40%, 
-                  rgba(14,15,18,0.60) 70%, 
-                  rgba(14,15,18,0.85) 100%
+                  rgba(14,15,18,0.80) 0%, 
+                  rgba(14,15,18,0.65) 35%, 
+                  rgba(14,15,18,0.70) 65%, 
+                  rgba(14,15,18,0.90) 100%
                 )
               `,
             }}
