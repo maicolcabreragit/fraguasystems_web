@@ -51,30 +51,12 @@ const itemVariants = {
 
 export function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [availableVideos, setAvailableVideos] = useState<string[]>([]);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  // Check which videos actually exist
-  useEffect(() => {
-    const checkVideos = async () => {
-      const existing: string[] = [];
-      for (const src of HERO_VIDEOS) {
-        try {
-          const res = await fetch(src, { method: "HEAD" });
-          if (res.ok) existing.push(src);
-        } catch {
-          // Video doesn't exist, skip
-        }
-      }
-      setAvailableVideos(existing);
-    };
-    checkVideos();
-  }, []);
-
-  // Advance to next video when current one ends (no loop, smooth transition)
+  // Advance to next video when current one ends (smooth crossfade)
   const handleVideoEnded = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % availableVideos.length);
-  }, [availableVideos.length]);
+    setActiveIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+  }, []);
 
   // Play active video, pause others
   useEffect(() => {
@@ -91,9 +73,13 @@ export function HeroSection() {
 
   const setVideoRef = useCallback((el: HTMLVideoElement | null, i: number) => {
     videoRefs.current[i] = el;
+    // Autoplay the first video as soon as it mounts
+    if (el && i === 0 && el.paused) {
+      el.play().catch(() => {});
+    }
   }, []);
 
-  const hasVideos = availableVideos.length > 0;
+  const hasVideos = HERO_VIDEOS.length > 0;
 
   return (
     <section
@@ -103,7 +89,7 @@ export function HeroSection() {
       {/* ─── Video Background (if videos exist) ──────────── */}
       {hasVideos && (
         <div className="absolute inset-0 z-0">
-          {availableVideos.map((src, i) => (
+          {HERO_VIDEOS.map((src, i) => (
             <video
               key={src}
               ref={(el) => setVideoRef(el, i)}
