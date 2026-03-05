@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 /* ═══════════════════════════════════════════════════════════════════
    AboutUs — Industrial Clean v2.0 (Stimulo Team-inspired)
@@ -21,13 +22,19 @@ export function AboutUs() {
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 150, damping: 20 }}
           >
-            <div className="relative aspect-[4/3] overflow-hidden bg-forged-slate">
-              {/* Placeholder — professional visual */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-forged-slate to-abyss-black">
-                <span className="font-display font-bold text-6xl text-titanium-white/10 tracking-tight">
-                  FS
-                </span>
-                <span className="text-xs text-machine-gray/40 font-medium uppercase tracking-[0.2em]">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src="/brand/aboutus-visual.png"
+                alt="Equipo de ingeniería trabajando en soluciones HORECA"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized
+              />
+              {/* Subtle overlay for brand cohesion */}
+              <div className="absolute inset-0 bg-gradient-to-t from-abyss-black/30 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4">
+                <span className="text-xs text-titanium-white/60 font-medium uppercase tracking-[0.2em]">
                   Lleida · Catalunya · España
                 </span>
               </div>
