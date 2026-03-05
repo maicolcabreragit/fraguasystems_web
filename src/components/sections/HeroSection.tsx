@@ -17,15 +17,13 @@ import { IndustrialButton } from "@/components/ui/IndustrialButton";
 // Videos in public/hero-videos/ — add or remove as needed.
 // The component auto-detects which ones exist.
 const HERO_VIDEOS = [
-  "/hero-videos/hero_startup_planning.mp4",
   "/hero-videos/hero_hotel_lobby.mp4",
   "/hero-videos/hero_kitchen_copper.mp4",
   "/hero-videos/hero_server_corridor.mp4",
   "/hero-videos/hero_restaurant_evening.mp4",
   "/hero-videos/hero_copper_abstract.mp4",
+  "/hero-videos/hero_startup_planning.mp4",
 ];
-
-const ROTATION_INTERVAL = 10000; // 10s per video
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -73,16 +71,12 @@ export function HeroSection() {
     checkVideos();
   }, []);
 
-  // Rotate videos
-  useEffect(() => {
-    if (availableVideos.length <= 1) return;
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % availableVideos.length);
-    }, ROTATION_INTERVAL);
-    return () => clearInterval(timer);
+  // Advance to next video when current one ends (no loop, smooth transition)
+  const handleVideoEnded = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % availableVideos.length);
   }, [availableVideos.length]);
 
-  // Play active video
+  // Play active video, pause others
   useEffect(() => {
     videoRefs.current.forEach((video, i) => {
       if (!video) return;
@@ -115,9 +109,9 @@ export function HeroSection() {
               ref={(el) => setVideoRef(el, i)}
               src={src}
               muted
-              loop
               playsInline
               preload="auto"
+              onEnded={i === activeIndex ? handleVideoEnded : undefined}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
                 i === activeIndex ? "opacity-100" : "opacity-0"
               }`}
@@ -234,38 +228,18 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* ─── Video indicator dots (if multiple videos) ──── */}
-      {availableVideos.length > 1 && (
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-          {availableVideos.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveIndex(i)}
-              className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
-                i === activeIndex
-                  ? "bg-molten-copper w-6"
-                  : "bg-machine-gray/30 hover:bg-machine-gray/50"
-              }`}
-              aria-label={`Video ${i + 1}`}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* ─── Scroll indicator ────────────────────────────── */}
+      {/* ─── Scroll indicator (below all content) ────────── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <span className="text-[10px] uppercase tracking-[0.3em] text-machine-gray/40">Scroll</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-machine-gray/40">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-machine-gray/30">
             <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </motion.div>
