@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const TO_EMAIL = process.env.CONTACT_EMAIL || "info@fraguasystems.com";
 const FROM_EMAIL = process.env.RESEND_FROM || "Fragua Systems <onboarding@resend.dev>";
-const LOGO_URL = "https://www.fraguasystems.com/brand/logo_monogram_fs_copper.png";
+const LOGO_URL = "https://www.fraguasystems.com/brand/logo.png";
 const SITE_URL = "https://www.fraguasystems.com";
 
 // Sanitize user input to prevent XSS in email
