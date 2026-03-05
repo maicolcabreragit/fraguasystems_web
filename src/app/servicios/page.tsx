@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { IndustrialButton } from "@/components/ui/IndustrialButton";
 
 /* ═══════════════════════════════════════════════════════════════════
-   /servicios — Full Service Catalog (100 services)
+   /servicios — Full Service Catalog (100+ services)
    
-   Accordion-by-category layout. Each category expands to show
-   compact service rows with tier badges.
+   Features:
+   - Real-time search with fuzzy matching
+   - Tier filter chips (Élite / Avanzado / Táctico / MRR)
+   - Accordion categories with filtered counts
+   - Individual service CTAs → pre-filled contact form
    ═══════════════════════════════════════════════════════════════════ */
 
 type Tier = "elite" | "avanzado" | "tactico" | "mrr";
@@ -27,11 +30,11 @@ interface Category {
   services: Service[];
 }
 
-const tierConfig: Record<Tier, { label: string; color: string; bg: string; border: string }> = {
-  elite:    { label: "ÉLITE",    color: "text-molten-copper",     bg: "bg-molten-copper/8",    border: "border-molten-copper/20" },
-  avanzado: { label: "AVANZADO", color: "text-industrial-gold",   bg: "bg-industrial-gold/8",  border: "border-industrial-gold/20" },
-  tactico:  { label: "TÁCTICO",  color: "text-emerald-400",       bg: "bg-emerald-400/8",      border: "border-emerald-400/20" },
-  mrr:      { label: "MRR",      color: "text-sky-400",           bg: "bg-sky-400/8",          border: "border-sky-400/20" },
+const tierConfig: Record<Tier, { label: string; color: string; bg: string; border: string; activeBg: string }> = {
+  elite:    { label: "ÉLITE",    color: "text-molten-copper",     bg: "bg-molten-copper/8",    border: "border-molten-copper/20",    activeBg: "bg-molten-copper/20" },
+  avanzado: { label: "AVANZADO", color: "text-industrial-gold",   bg: "bg-industrial-gold/8",  border: "border-industrial-gold/20",  activeBg: "bg-industrial-gold/20" },
+  tactico:  { label: "TÁCTICO",  color: "text-emerald-400",       bg: "bg-emerald-400/8",      border: "border-emerald-400/20",      activeBg: "bg-emerald-400/20" },
+  mrr:      { label: "MRR",      color: "text-sky-400",           bg: "bg-sky-400/8",          border: "border-sky-400/20",          activeBg: "bg-sky-400/20" },
 };
 
 const categories: Category[] = [
@@ -203,6 +206,12 @@ const categories: Category[] = [
   },
 ];
 
+/* ─── Helper: normalize text for search ─────────────────────────── */
+function normalize(s: string) {
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+/* ─── Tier Badge ────────────────────────────────────────────────── */
 function TierBadge({ tier }: { tier: Tier }) {
   const cfg = tierConfig[tier];
   return (
@@ -214,11 +223,27 @@ function TierBadge({ tier }: { tier: Tier }) {
   );
 }
 
-function CategoryAccordion({ cat, defaultOpen }: { cat: Category; defaultOpen?: boolean }) {
+/* ─── Category Accordion ────────────────────────────────────────── */
+function CategoryAccordion({ 
+  cat, 
+  filteredServices, 
+  defaultOpen,
+  searchQuery,
+}: { 
+  cat: Category; 
+  filteredServices: Service[];
+  defaultOpen?: boolean;
+  searchQuery: string;
+}) {
   const [open, setOpen] = useState(defaultOpen ?? false);
 
+  if (filteredServices.length === 0) return null;
+
   return (
-    <div className="border border-brushed-steel/15 rounded-xl bg-forged-slate/25 overflow-hidden transition-colors hover:border-brushed-steel/30">
+    <motion.div
+      layout
+      className="border border-brushed-steel/15 overflow-hidden transition-colors hover:border-brushed-steel/30"
+    >
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-forged-slate/40"
@@ -228,7 +253,7 @@ function CategoryAccordion({ cat, defaultOpen }: { cat: Category; defaultOpen?: 
           {cat.title}
         </span>
         <span className="text-[11px] text-machine-gray/50 font-mono tabular-nums mr-2">
-          {cat.services.length}
+          {filteredServices.length}
         </span>
         <svg
           width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -247,24 +272,90 @@ function CategoryAccordion({ cat, defaultOpen }: { cat: Category; defaultOpen?: 
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-4 space-y-1.5">
+            <div className="px-5 pb-4 space-y-0.5">
               <div className="h-px bg-brushed-steel/10 mb-3" />
-              {cat.services.map((s) => (
-                <div
-                  key={s.id}
-                  className="flex items-start gap-2.5 py-1.5 group"
-                >
-                  <TierBadge tier={s.tier} />
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium text-titanium-white/90">
-                      {s.name}
-                    </span>
-                    <span className="text-sm text-machine-gray/50 ml-1.5">
-                      · {s.desc}
-                    </span>
-                  </div>
-                </div>
+              {filteredServices.map((s) => (
+                <ServiceRow key={s.id} service={s} searchQuery={searchQuery} />
               ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+/* ─── Service Row with CTA ──────────────────────────────────────── */
+function ServiceRow({ service, searchQuery }: { service: Service; searchQuery: string }) {
+  const [expanded, setExpanded] = useState(false);
+
+  // Highlight matching text
+  const highlightMatch = (text: string) => {
+    if (!searchQuery.trim()) return text;
+    const normalizedQuery = normalize(searchQuery);
+    const normalizedText = normalize(text);
+    const idx = normalizedText.indexOf(normalizedQuery);
+    if (idx === -1) return text;
+    const before = text.slice(0, idx);
+    const match = text.slice(idx, idx + searchQuery.length);
+    const after = text.slice(idx + searchQuery.length);
+    return (
+      <>
+        {before}
+        <mark className="bg-molten-copper/25 text-molten-copper rounded-sm px-0.5">{match}</mark>
+        {after}
+      </>
+    );
+  };
+
+  return (
+    <div className="group">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-start gap-2.5 py-2 text-left transition-colors hover:bg-forged-slate/20 px-2 -mx-2"
+      >
+        <TierBadge tier={service.tier} />
+        <div className="flex-1 min-w-0">
+          <span className="text-sm font-medium text-titanium-white/90">
+            {highlightMatch(service.name)}
+          </span>
+          <span className="text-sm text-machine-gray/50 ml-1.5">
+            · {highlightMatch(service.desc)}
+          </span>
+        </div>
+        <svg
+          width="14" height="14" viewBox="0 0 24 24" fill="none"
+          className={`text-machine-gray/30 flex-shrink-0 mt-1 transition-all duration-200 
+            ${expanded ? "rotate-180 text-molten-copper/60" : "opacity-0 group-hover:opacity-100"}`}
+        >
+          <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="pl-12 pr-4 pb-3 flex items-center gap-3">
+              <p className="text-sm text-machine-gray/70 flex-1">
+                {service.desc}
+              </p>
+              <Link
+                href={`/#contacto?servicio=${encodeURIComponent(service.name)}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-molten-copper 
+                  border border-molten-copper/30 hover:bg-molten-copper/10 hover:border-molten-copper/50
+                  transition-all duration-200 whitespace-nowrap flex-shrink-0"
+              >
+                Solicitar info
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
             </div>
           </motion.div>
         )}
@@ -273,13 +364,50 @@ function CategoryAccordion({ cat, defaultOpen }: { cat: Category; defaultOpen?: 
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   Main Page Component
+   ═══════════════════════════════════════════════════════════════════ */
 export default function ServiciosPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTiers, setActiveTiers] = useState<Set<Tier>>(new Set());
+
   const totalServices = categories.reduce((acc, c) => acc + c.services.length, 0);
+
+  const toggleTier = useCallback((tier: Tier) => {
+    setActiveTiers((prev) => {
+      const next = new Set(prev);
+      if (next.has(tier)) next.delete(tier);
+      else next.add(tier);
+      return next;
+    });
+  }, []);
+
+  // Filter categories and services
+  const filteredCategories = useMemo(() => {
+    const normalizedQuery = normalize(searchQuery.trim());
+
+    return categories.map((cat) => {
+      const filtered = cat.services.filter((s) => {
+        // Tier filter
+        if (activeTiers.size > 0 && !activeTiers.has(s.tier)) return false;
+        // Search filter
+        if (normalizedQuery) {
+          const haystack = normalize(`${s.name} ${s.desc}`);
+          return haystack.includes(normalizedQuery);
+        }
+        return true;
+      });
+      return { ...cat, filteredServices: filtered };
+    });
+  }, [searchQuery, activeTiers]);
+
+  const filteredCount = filteredCategories.reduce((acc, c) => acc + c.filteredServices.length, 0);
+  const isFiltering = searchQuery.trim() !== "" || activeTiers.size > 0;
 
   return (
     <main className="section-dark min-h-screen pt-24 md:pt-32 pb-20">
       {/* ─── Header ──────────────────────────────────────── */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-12">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-8">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-machine-gray hover:text-molten-copper transition-colors mb-8 group"
@@ -306,44 +434,144 @@ export default function ServiciosPage() {
             {totalServices} Servicios de{" "}
             <span className="text-gradient-copper">Ingeniería HORECA.</span>
           </h1>
-          <p className="text-lg text-machine-gray leading-relaxed max-w-2xl mb-6">
+          <p className="text-lg text-machine-gray leading-relaxed max-w-2xl mb-8">
             Desde arquitecturas PMS de misión crítica hasta automatizaciones
             tácticas de alto impacto. Cada servicio resuelve un dolor operativo
             específico del sector.
           </p>
+        </motion.div>
+      </div>
 
-          {/* Tier legend */}
-          <div className="flex items-center gap-3 flex-wrap">
-            {(Object.entries(tierConfig) as [Tier, typeof tierConfig[Tier]][]).map(([key, cfg]) => (
-              <div key={key} className="flex items-center gap-1.5">
-                <span className={`inline-block w-2 h-2 rounded-full ${cfg.bg} border ${cfg.border}`} />
-                <span className={`text-[11px] font-medium ${cfg.color}`}>{cfg.label}</span>
-              </div>
-            ))}
+      {/* ─── Search + Filters Bar ─────────────────────────── */}
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 22 }}
+          className="space-y-4"
+        >
+          {/* Search input */}
+          <div className="relative">
+            <svg
+              width="18" height="18" viewBox="0 0 24 24" fill="none"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-machine-gray/40 pointer-events-none"
+            >
+              <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5" />
+              <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar servicios... ej: VeriFactu, PMS, IoT, reservas"
+              className="w-full pl-12 pr-4 py-3.5 
+                bg-forged-slate/40 border border-brushed-steel/20
+                text-titanium-white text-sm
+                placeholder:text-machine-gray/40
+                focus:outline-none focus:border-molten-copper/50 focus:ring-1 focus:ring-molten-copper/15
+                transition-all duration-300 font-body"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-machine-gray/40 hover:text-titanium-white transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {/* Tier filter chips + results counter */}
+          <div className="flex flex-wrap items-center gap-2">
+            {(Object.entries(tierConfig) as [Tier, typeof tierConfig[Tier]][]).map(([key, cfg]) => {
+              const isActive = activeTiers.has(key);
+              return (
+                <button
+                  key={key}
+                  onClick={() => toggleTier(key)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase
+                    border transition-all duration-200
+                    ${isActive 
+                      ? `${cfg.color} ${cfg.activeBg} ${cfg.border}` 
+                      : `text-machine-gray/50 bg-transparent border-brushed-steel/15 hover:border-brushed-steel/30 hover:text-machine-gray`
+                    }`}
+                >
+                  <span className={`inline-block w-1.5 h-1.5 rounded-full ${isActive ? cfg.activeBg : "bg-machine-gray/20"} border ${cfg.border}`} />
+                  {cfg.label}
+                </button>
+              );
+            })}
+
+            {/* Results counter */}
+            <div className="ml-auto text-[11px] text-machine-gray/50 font-mono tabular-nums">
+              {isFiltering ? (
+                <motion.span
+                  key={filteredCount}
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {filteredCount} de {totalServices} servicios
+                </motion.span>
+              ) : (
+                <span>{totalServices} servicios</span>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
 
       {/* ─── Accordion Grid ──────────────────────────────── */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
-          className="space-y-3"
-        >
-          {categories.map((cat, i) => (
+        <div className="space-y-3">
+          <AnimatePresence mode="popLayout">
+            {filteredCategories.map((cat, i) => (
+              cat.filteredServices.length > 0 && (
+                <motion.div
+                  key={cat.title}
+                  layout
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 22, delay: i * 0.03 } }}
+                  exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.15 } }}
+                >
+                  <CategoryAccordion
+                    cat={cat}
+                    filteredServices={cat.filteredServices}
+                    defaultOpen={isFiltering || i === 0}
+                    searchQuery={searchQuery}
+                  />
+                </motion.div>
+              )
+            ))}
+          </AnimatePresence>
+
+          {/* No results state */}
+          {filteredCount === 0 && (
             <motion.div
-              key={cat.title}
-              variants={{
-                hidden: { opacity: 0, y: 15 },
-                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 22 } },
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-20"
             >
-              <CategoryAccordion cat={cat} defaultOpen={i === 0} />
+              <div className="inline-flex items-center justify-center w-16 h-16 mb-6 border border-brushed-steel/20">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-machine-gray/30">
+                  <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </div>
+              <p className="text-machine-gray/50 text-sm mb-2">
+                No se encontraron servicios para esta búsqueda.
+              </p>
+              <button
+                onClick={() => { setSearchQuery(""); setActiveTiers(new Set()); }}
+                className="text-sm text-molten-copper hover:text-molten-copper/80 transition-colors"
+              >
+                Limpiar filtros
+              </button>
             </motion.div>
-          ))}
-        </motion.div>
+          )}
+        </div>
       </div>
 
       {/* ─── Bottom CTA ──────────────────────────────────── */}
