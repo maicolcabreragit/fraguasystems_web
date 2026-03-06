@@ -20,6 +20,11 @@ const serviciosSubmenu = [
   { label: "Catálogo Completo", desc: "Los 100+ servicios de ingeniería HORECA", href: "/servicios" },
 ];
 
+const accesoSubmenu = [
+  { label: "Área de Clientes", desc: "Portal de seguimiento de tu proyecto", href: "/area-clientes" },
+  { label: "Área de Trabajador", desc: "Dashboard interno del equipo", href: "/area-clientes" },
+];
+
 const navLinks = [
   { label: "Sobre Nosotros", href: "/#nosotros" },
   { label: "Proceso", href: "/#proceso" },
@@ -30,8 +35,11 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [serviciosOpen, setServiciosOpen] = useState(false);
+  const [accesoOpen, setAccesoOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const accesoRef = useRef<HTMLDivElement>(null);
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout>>(null);
+  const accesoTimeout = useRef<ReturnType<typeof setTimeout>>(null);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -51,6 +59,9 @@ export function Navbar() {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setServiciosOpen(false);
+      }
+      if (accesoRef.current && !accesoRef.current.contains(e.target as Node)) {
+        setAccesoOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -83,6 +94,15 @@ export function Navbar() {
 
   const handleDropdownLeave = () => {
     dropdownTimeout.current = setTimeout(() => setServiciosOpen(false), 150);
+  };
+
+  const handleAccesoEnter = () => {
+    if (accesoTimeout.current) clearTimeout(accesoTimeout.current);
+    setAccesoOpen(true);
+  };
+
+  const handleAccesoLeave = () => {
+    accesoTimeout.current = setTimeout(() => setAccesoOpen(false), 150);
   };
 
   const linkClasses = `
@@ -204,6 +224,55 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Acceso dropdown */}
+            <div
+              ref={accesoRef}
+              className="relative"
+              onMouseEnter={handleAccesoEnter}
+              onMouseLeave={handleAccesoLeave}
+            >
+              <button
+                onClick={() => setAccesoOpen(!accesoOpen)}
+                className={`${linkClasses} ${linkColorClasses} inline-flex items-center gap-1 cursor-pointer`}
+              >
+                Acceso
+                <svg
+                  width="12" height="12" viewBox="0 0 24 24" fill="none"
+                  className={`transition-transform duration-200 ${accesoOpen ? "rotate-180" : ""}`}
+                >
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              <AnimatePresence>
+                {accesoOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="absolute top-full right-0 mt-1 w-64 bg-white border border-border-light shadow-lg overflow-hidden"
+                  >
+                    {accesoSubmenu.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setAccesoOpen(false)}
+                        className="block px-4 py-3 hover:bg-cloud-gray transition-colors group"
+                      >
+                        <span className="block text-sm font-medium text-ink-black group-hover:text-molten-copper transition-colors">
+                          {item.label}
+                        </span>
+                        <span className="block text-xs text-soft-gray mt-0.5">
+                          {item.desc}
+                        </span>
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* ─── Desktop CTA ───────────────────────────────── */}
@@ -310,6 +379,32 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+
+              {/* Divider */}
+              <div className="w-12 h-px bg-border-light" />
+
+              {/* Acceso group - mobile */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ delay: 0.25 }}
+                className="flex flex-col items-center gap-2"
+              >
+                <span className="text-xs font-medium uppercase tracking-[0.15em] text-soft-gray mb-1">
+                  Acceso
+                </span>
+                {accesoSubmenu.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-xl font-display font-semibold text-ink-black hover:text-molten-copper transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </motion.div>
 
               {/* CTA */}
               <motion.div

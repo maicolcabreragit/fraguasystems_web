@@ -1,0 +1,362 @@
+{
+  "leads": [
+    {
+      "businessName": "Hotel Nastasi & Spa",
+      "contactName": "Jordi Martínez",
+      "contactRole": "Director General",
+      "phone": "973 227 050",
+      "email": "info@hotelnastasi.com",
+      "businessType": "hotel",
+      "tier": "A",
+      "status": "reunion",
+      "location": "Lleida",
+      "size": "89 habitaciones",
+      "painPoints": [
+        "SES.Hospedajes",
+        "VeriFactu",
+        "Comisiones OTAs"
+      ],
+      "estimatedTicket": 12000,
+      "nextAction": "Preparar propuesta Enterprise",
+      "nextActionDate": "2026-03-08",
+      "notes": "Hotel de 4 estrellas. Muy interesado en cumplimiento normativo y canal directo.",
+      "assignedTo": "admin-socio",
+      "id": "def2686b-cbaa-4a05-a72c-260f3d0231e0",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Hotel Zenit Lleida",
+      "contactName": "Maria Teresa Puig",
+      "contactRole": "Revenue Manager",
+      "phone": "973 209 191",
+      "email": "reservas@zenitleida.com",
+      "businessType": "hotel",
+      "tier": "A",
+      "status": "contactado",
+      "location": "Lleida",
+      "size": "71 habitaciones",
+      "painPoints": [
+        "SES.Hospedajes",
+        "Comisiones OTAs",
+        "Gestión manual"
+      ],
+      "estimatedTicket": 9000,
+      "nextAction": "Llamar para agendar reunión",
+      "nextActionDate": "2026-03-07",
+      "notes": "Cadena con varios hoteles. Potencial alto si la primera implementación va bien.",
+      "assignedTo": "admin-socio",
+      "id": "89b23b57-877c-42f6-800c-151608ddd08a",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Cal Duc - Casa Rural",
+      "contactName": "Pere Solé",
+      "contactRole": "Propietario",
+      "phone": "973 650 123",
+      "email": "info@calduc.com",
+      "businessType": "rural",
+      "tier": "A",
+      "status": "nuevo",
+      "location": "Pallars Jussà",
+      "size": "8 habitaciones",
+      "painPoints": [
+        "SES.Hospedajes",
+        "Web obsoleta",
+        "Sin reservas online"
+      ],
+      "estimatedTicket": 3500,
+      "nextAction": "Primera llamada de prospección",
+      "nextActionDate": "2026-03-06",
+      "notes": "Casa rural en el Pirineu. Web muy antigua, no tiene sistema de reservas.",
+      "assignedTo": "admin-socio",
+      "id": "4dd12b29-1757-42ed-8e7e-d75ac06f11ec",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Restaurant La Huerta",
+      "contactName": "Ana Blasco",
+      "contactRole": "Gerente",
+      "phone": "973 243 567",
+      "email": "lahuerta@gmail.com",
+      "businessType": "restaurante",
+      "tier": "B",
+      "status": "nuevo",
+      "location": "Lleida",
+      "size": "60 comensales",
+      "painPoints": [
+        "VeriFactu",
+        "Sin presencia digital"
+      ],
+      "estimatedTicket": 2000,
+      "nextAction": "Enviar email introductorio",
+      "nextActionDate": "2026-03-09",
+      "notes": "Restaurante consolidado pero sin presencia online. VeriFactu urgente.",
+      "assignedTo": "admin-socio",
+      "id": "fd68b5a9-e4d3-4e72-8de9-57b64e3cadf0",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Apartamentos Turístics Segre",
+      "contactName": "Marc Fontanet",
+      "contactRole": "Gestor",
+      "phone": "973 281 900",
+      "email": "marc@aptsegre.com",
+      "businessType": "apartamentos",
+      "tier": "A",
+      "status": "propuesta",
+      "location": "Lleida",
+      "size": "15 apartamentos",
+      "painPoints": [
+        "SES.Hospedajes",
+        "Comisiones OTAs",
+        "Gestión manual"
+      ],
+      "estimatedTicket": 6000,
+      "nextAction": "Seguimiento propuesta enviada",
+      "nextActionDate": "2026-03-07",
+      "notes": "Ya les enviamos propuesta Professional. Muy interesado pero consulta con socio.",
+      "assignedTo": "admin-maicol",
+      "id": "62e58458-dcbe-406b-a9d7-f334fae06b2a",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Hostal del Rei",
+      "contactName": "Rosa Prats",
+      "contactRole": "Propietaria",
+      "phone": "973 456 789",
+      "email": "hostaldelrei@hotmail.com",
+      "businessType": "hotel",
+      "tier": "B",
+      "status": "nuevo",
+      "location": "Balaguer",
+      "size": "22 habitaciones",
+      "painPoints": [
+        "SES.Hospedajes",
+        "Web obsoleta"
+      ],
+      "estimatedTicket": 3000,
+      "nextAction": "Llamar la semana que viene",
+      "nextActionDate": "2026-03-11",
+      "notes": "Hostal familiar. Web de 2018. Probablemente Paquete Starter.",
+      "assignedTo": "admin-socio",
+      "id": "aab4fd29-6c2b-419c-ad31-63f32a7f6c24",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Les Corts Hotel Boutique",
+      "contactName": "David Clua",
+      "contactRole": "Director",
+      "phone": "973 300 100",
+      "email": "info@lescortshotel.com",
+      "businessType": "hotel",
+      "tier": "A",
+      "status": "negociacion",
+      "location": "Lleida",
+      "size": "32 habitaciones",
+      "painPoints": [
+        "SES.Hospedajes",
+        "VeriFactu",
+        "Comisiones OTAs"
+      ],
+      "estimatedTicket": 15000,
+      "nextAction": "Cerrar contrato esta semana",
+      "nextActionDate": "2026-03-06",
+      "notes": "Hotel boutique premium. Quiere PMS completo + web + compliance. Ticket alto.",
+      "assignedTo": "admin-maicol",
+      "id": "8fa57c47-e190-4250-ba67-d80d7e12c6c8",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Ca la Siona - Turisme Rural",
+      "contactName": "Montse Vilaró",
+      "contactRole": "Propietaria",
+      "phone": "973 780 456",
+      "email": "calasiona@turismerural.cat",
+      "businessType": "rural",
+      "tier": "B",
+      "status": "contactado",
+      "location": "Alt Urgell",
+      "size": "6 habitaciones",
+      "painPoints": [
+        "Web obsoleta",
+        "Sin reservas online",
+        "SES.Hospedajes"
+      ],
+      "estimatedTicket": 2500,
+      "nextAction": "Agendar videollamada demo",
+      "nextActionDate": "2026-03-08",
+      "notes": "Casa rural preciosa. Solo tiene Instagram, necesita web y reservas directas.",
+      "assignedTo": "admin-socio",
+      "id": "25173eb1-b6ab-41ba-be2e-2cf0a1822c9b",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Cafetería El Bolsi",
+      "contactName": "Toni Casals",
+      "contactRole": "Dueño",
+      "phone": "973 210 333",
+      "email": "elbolsi@gmail.com",
+      "businessType": "bar",
+      "tier": "C",
+      "status": "nuevo",
+      "location": "Lleida",
+      "size": "30 plazas",
+      "painPoints": [
+        "VeriFactu",
+        "Sin presencia digital"
+      ],
+      "estimatedTicket": 1500,
+      "nextAction": "Incluir en campaña email masivo",
+      "nextActionDate": "2026-03-13",
+      "notes": "Cafetería pequeña. Ticket bajo pero puede ser rápido.",
+      "assignedTo": "admin-socio",
+      "id": "d34fda80-8e62-49ec-bf29-3f35cfd9e9a2",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    },
+    {
+      "businessName": "Parador de Lleida",
+      "contactName": "Luis Hernández",
+      "contactRole": "Director Comercial",
+      "phone": "973 200 000",
+      "email": "lleida@parador.es",
+      "businessType": "hotel",
+      "tier": "A",
+      "status": "nuevo",
+      "location": "Lleida",
+      "size": "65 habitaciones",
+      "painPoints": [
+        "Comisiones OTAs",
+        "Gestión manual"
+      ],
+      "estimatedTicket": 18000,
+      "nextAction": "Investigar si usan PMS externo",
+      "nextActionDate": "2026-03-07",
+      "notes": "Gran oportunidad pero difícil acceso. Cadena nacional con burocracia.",
+      "assignedTo": "admin-maicol",
+      "id": "f43a4d43-608b-4034-9ece-5c41c0f1d243",
+      "createdAt": "2026-03-06T16:37:59.218Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Hotel La Garbinada — Web + PMS + Compliance",
+      "clientName": "Hotel La Garbinada",
+      "leadId": null,
+      "status": "active",
+      "currentPhase": "maintenance",
+      "phases": [
+        {
+          "phase": "discovery",
+          "label": "Discovery",
+          "completed": true,
+          "completedAt": "2025-11-01T00:00:00Z"
+        },
+        {
+          "phase": "design",
+          "label": "Diseño",
+          "completed": true,
+          "completedAt": "2025-11-15T00:00:00Z"
+        },
+        {
+          "phase": "development",
+          "label": "Desarrollo",
+          "completed": true,
+          "completedAt": "2026-01-20T00:00:00Z"
+        },
+        {
+          "phase": "testing",
+          "label": "Testing",
+          "completed": true,
+          "completedAt": "2026-02-15T00:00:00Z"
+        },
+        {
+          "phase": "deployment",
+          "label": "Despliegue",
+          "completed": true,
+          "completedAt": "2026-03-01T00:00:00Z"
+        },
+        {
+          "phase": "maintenance",
+          "label": "Mantenimiento",
+          "completed": false,
+          "completedAt": null
+        }
+      ],
+      "packageType": "enterprise",
+      "totalBudget": 15000,
+      "paidAmount": 15000,
+      "deadline": "2026-03-01",
+      "description": "Proyecto estrella: web multi-idioma, motor reservas directo, PMS completo, chatbot IA, compliance SES.Hospedajes automatizado.",
+      "id": "0fa3be69-0540-41ca-8b84-45b3a129edcf",
+      "createdAt": "2025-11-01T00:00:00Z",
+      "updatedAt": "2026-03-06T16:37:59.218Z"
+    }
+  ],
+  "activities": [
+    {
+      "type": "call",
+      "title": "Primera llamada de prospección",
+      "description": "Contacté con Jordi del Hotel Nastasi. Muy receptivo al tema SES.Hospedajes.",
+      "outcome": "Interesado, agendamos reunión presencial",
+      "userName": "Socio Ventas",
+      "id": "d74f2efb-fbf5-4bf8-94f9-5b3e727f9039",
+      "leadId": "def2686b-cbaa-4a05-a72c-260f3d0231e0",
+      "userId": "admin-socio",
+      "createdAt": "2026-03-01T16:37:59.219Z"
+    },
+    {
+      "type": "meeting",
+      "title": "Reunión presencial Hotel Nastasi",
+      "description": "Demo completa del sistema La Garbinada. Impresionados con la automatización Mossos.",
+      "outcome": "Solicitan propuesta Enterprise",
+      "userName": "Maicol Cabrera",
+      "id": "4743f4fa-f96d-4df3-9f4a-5bf31f63a148",
+      "leadId": "89b23b57-877c-42f6-800c-151608ddd08a",
+      "userId": "admin-maicol",
+      "createdAt": "2026-03-02T16:37:59.219Z"
+    },
+    {
+      "type": "email",
+      "title": "Propuesta enviada - Apt. Segre",
+      "description": "Propuesta Professional con detalle de PMS + canal directo. Presupuesto: €6.000.",
+      "outcome": "Pendiente respuesta",
+      "userName": "Maicol Cabrera",
+      "id": "28b8671a-bc07-4ae0-ab47-c65dd3e090fd",
+      "leadId": "4dd12b29-1757-42ed-8e7e-d75ac06f11ec",
+      "userId": "admin-maicol",
+      "createdAt": "2026-03-03T16:37:59.219Z"
+    },
+    {
+      "type": "call",
+      "title": "Follow-up Hotel Zenit",
+      "description": "Llamada para agendar demo. Revenue Manager interesada pero pide confirmación dirección.",
+      "outcome": "Callback la semana que viene",
+      "userName": "Socio Ventas",
+      "id": "1762b000-cce0-471c-be0f-86b96ecb3a27",
+      "leadId": "fd68b5a9-e4d3-4e72-8de9-57b64e3cadf0",
+      "userId": "admin-socio",
+      "createdAt": "2026-03-04T16:37:59.219Z"
+    },
+    {
+      "type": "proposal",
+      "title": "Propuesta Enterprise - Les Corts",
+      "description": "PMS completo + web + VeriFactu + SES.Hospedajes. Todo incluido.",
+      "outcome": "En negociación, pendiente firma",
+      "userName": "Maicol Cabrera",
+      "id": "bed2edb8-6beb-4adc-aba4-7da13d5f195b",
+      "leadId": "62e58458-dcbe-406b-a9d7-f334fae06b2a",
+      "userId": "admin-maicol",
+      "createdAt": "2026-03-05T16:37:59.219Z"
+    }
+  ]
+}

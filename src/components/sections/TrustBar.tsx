@@ -48,9 +48,11 @@ export function TrustBar() {
                   </svg>
                 </div>
                 <p className="text-sm font-display font-semibold text-ink-black">{badge.label}</p>
-                <p className="text-xs text-soft-gray mt-0.5">{badge.sublabel}</p>
+                <p className="text-xs text-soft-gray mt-0.5">{badge.sublabel}</p>~
+                1€ -!
               </motion.div>
             ))}
+            1
           </div>
         </motion.div>
       </div>

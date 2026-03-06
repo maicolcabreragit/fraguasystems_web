@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/sections/Navbar";
-import { ChatWidget } from "@/components/ChatWidget";
+import { LayoutShell } from "@/components/LayoutShell";
 
 /* ═══════════════════════════════════════════════════════════════════
    Fragua Systems — Dual Typography System
@@ -89,9 +88,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${ibmPlexSans.variable} ${inter.variable} scroll-smooth`}>
       <body className="antialiased">
-        <Navbar />
-        {children}
-        <ChatWidget />
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

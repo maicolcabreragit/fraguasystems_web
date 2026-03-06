@@ -3,17 +3,54 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 /* ═══════════════════════════════════════════════════════════════════
-   /area-clientes — Client Login Portal
-
-   Placeholder login page. Backend authentication will be
-   implemented later.
+   /area-clientes — Client & Admin Login Portal
+   
+   Authenticates against /api/auth/login.
+   Admins are redirected to /dashboard.
+   Clients are redirected to /area-clientes/portal.
    ═══════════════════════════════════════════════════════════════════ */
 
 export default function AreaClientesPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Error de autenticación");
+        setLoading(false);
+        return;
+      }
+
+      // Redirect based on role
+      if (data.user.role === "admin") {
+        router.push("/dashboard");
+      } else {
+        router.push("/area-clientes/portal");
+      }
+    } catch {
+      setError("Error de conexión. Inténtelo de nuevo.");
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="section-dark min-h-screen flex items-center justify-center px-6 py-24">
@@ -59,21 +96,26 @@ export default function AreaClientesPage() {
               </svg>
             </div>
             <h1 className="font-display font-bold text-2xl text-titanium-white mb-2">
-              Área de Clientes
+              Área de Acceso
             </h1>
             <p className="text-sm text-machine-gray">
-              Acceda a su panel de seguimiento de proyectos
+              Panel de gestión y seguimiento de proyectos
             </p>
           </div>
 
+          {/* Error message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-5 px-4 py-2.5 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-lg"
+            >
+              {error}
+            </motion.div>
+          )}
+
           {/* Form */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              // Auth will be implemented later
-            }}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
               <label htmlFor="client-email" className="block text-xs font-medium text-machine-gray/80 uppercase tracking-wider mb-2">
@@ -93,6 +135,7 @@ export default function AreaClientesPage() {
                   transition-all duration-300
                 "
                 required
+                disabled={loading}
               />
             </div>
 
@@ -115,20 +158,30 @@ export default function AreaClientesPage() {
                   transition-all duration-300
                 "
                 required
+                disabled={loading}
               />
             </div>
 
             {/* Submit */}
             <button
               type="submit"
+              disabled={loading}
               className="
                 w-full py-3 rounded-lg text-sm font-semibold tracking-wide
                 bg-molten-copper text-abyss-black
                 hover:bg-molten-copper/90 active:scale-[0.98]
                 transition-all duration-200
+                disabled:opacity-50 disabled:cursor-not-allowed
               "
             >
-              Iniciar Sesión
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 border-2 border-abyss-black/30 border-t-abyss-black rounded-full animate-spin" />
+                  Verificando...
+                </span>
+              ) : (
+                "Iniciar Sesión"
+              )}
             </button>
           </form>
 
