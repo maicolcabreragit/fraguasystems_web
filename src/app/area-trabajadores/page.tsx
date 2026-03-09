@@ -6,14 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 /* ═══════════════════════════════════════════════════════════════════
-   /area-clientes — Client Login Portal
+   /area-trabajadores — Internal Staff Login
    
-   Only client users can log in here.
-   Redirects to /area-clientes/portal.
-   Admins should use /area-trabajadores instead.
+   Only admin users can log in here.
+   Always redirects to /dashboard.
    ═══════════════════════════════════════════════════════════════════ */
 
-export default function AreaClientesPage() {
+export default function AreaTrabajadoresPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -40,13 +39,13 @@ export default function AreaClientesPage() {
         return;
       }
 
-      // Only clients allowed here
-      if (data.user.role === "admin") {
-        setError("Esta zona es para clientes. Si eres del equipo, usa el Área de Trabajadores.");
+      if (data.user.role !== "admin") {
+        setError("Acceso restringido a trabajadores. Si eres cliente, usa el Área de Clientes.");
         setLoading(false);
         return;
       }
-      router.push("/area-clientes/portal");
+
+      router.push("/dashboard");
     } catch {
       setError("Error de conexión. Inténtelo de nuevo.");
       setLoading(false);
@@ -60,7 +59,7 @@ export default function AreaClientesPage() {
         className="fixed inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 40% 50% at 50% 40%, rgba(200,106,61,0.04) 0%, transparent 70%)
+            radial-gradient(ellipse 40% 50% at 50% 40%, rgba(78,130,220,0.06) 0%, transparent 70%)
           `,
         }}
         aria-hidden="true"
@@ -90,17 +89,17 @@ export default function AreaClientesPage() {
         <div className="rounded-2xl border border-brushed-steel/20 bg-forged-slate/30 backdrop-blur-sm p-8 md:p-10">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-molten-copper/10 border border-molten-copper/20 mb-4">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-molten-copper">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-4">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-blue-400">
+                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.5" />
               </svg>
             </div>
             <h1 className="font-display font-bold text-2xl text-titanium-white mb-2">
-              Área de Clientes
+              Área de Trabajadores
             </h1>
             <p className="text-sm text-machine-gray">
-              Seguimiento de tu proyecto en tiempo real
+              Dashboard interno del equipo Fragua Systems
             </p>
           </div>
 
@@ -119,20 +118,20 @@ export default function AreaClientesPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label htmlFor="client-email" className="block text-xs font-medium text-machine-gray/80 uppercase tracking-wider mb-2">
+              <label htmlFor="worker-email" className="block text-xs font-medium text-machine-gray/80 uppercase tracking-wider mb-2">
                 Correo electrónico
               </label>
               <input
-                id="client-email"
+                id="worker-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="su@empresa.com"
+                placeholder="tu@fraguasystems.com"
                 className="
                   w-full px-4 py-3 rounded-lg text-sm
                   bg-abyss-black/60 border border-brushed-steel/20
                   text-titanium-white placeholder:text-machine-gray/40
-                  focus:outline-none focus:border-molten-copper/50 focus:ring-1 focus:ring-molten-copper/20
+                  focus:outline-none focus:border-blue-400/50 focus:ring-1 focus:ring-blue-400/20
                   transition-all duration-300
                 "
                 required
@@ -142,11 +141,11 @@ export default function AreaClientesPage() {
 
             {/* Password */}
             <div>
-              <label htmlFor="client-password" className="block text-xs font-medium text-machine-gray/80 uppercase tracking-wider mb-2">
+              <label htmlFor="worker-password" className="block text-xs font-medium text-machine-gray/80 uppercase tracking-wider mb-2">
                 Contraseña
               </label>
               <input
-                id="client-password"
+                id="worker-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -155,7 +154,7 @@ export default function AreaClientesPage() {
                   w-full px-4 py-3 rounded-lg text-sm
                   bg-abyss-black/60 border border-brushed-steel/20
                   text-titanium-white placeholder:text-machine-gray/40
-                  focus:outline-none focus:border-molten-copper/50 focus:ring-1 focus:ring-molten-copper/20
+                  focus:outline-none focus:border-blue-400/50 focus:ring-1 focus:ring-blue-400/20
                   transition-all duration-300
                 "
                 required
@@ -169,26 +168,26 @@ export default function AreaClientesPage() {
               disabled={loading}
               className="
                 w-full py-3 rounded-lg text-sm font-semibold tracking-wide
-                bg-molten-copper text-abyss-black
-                hover:bg-molten-copper/90 active:scale-[0.98]
+                bg-blue-500 text-white
+                hover:bg-blue-500/90 active:scale-[0.98]
                 transition-all duration-200
                 disabled:opacity-50 disabled:cursor-not-allowed
               "
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-abyss-black/30 border-t-abyss-black rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   Verificando...
                 </span>
               ) : (
-                "Iniciar Sesión"
+                "Acceder al Dashboard"
               )}
             </button>
           </form>
 
           {/* Footer note */}
           <p className="text-center text-xs text-machine-gray/50 mt-6">
-            Las credenciales de acceso son proporcionadas por su gestor de proyecto.
+            Acceso exclusivo para el equipo de Fragua Systems.
           </p>
         </div>
       </motion.div>

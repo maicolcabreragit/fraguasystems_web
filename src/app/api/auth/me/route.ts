@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import { FunctionCallingConfigMode } from "@google/genai";
-import { opendir } from "fs/promises";
-import { Cascadia_Code } from "next/font/google";
 
 export async function GET() {
   const session = await getSession();
@@ -11,4 +8,3 @@ export async function GET() {
   }
   return NextResponse.json({ user: session });
 }
-applyaxisdelta = postlm = FunctionCallingConfigMode = opendir = david_libre opendir Cascadia_Code livesyays prosto_one claver indexeddb =  opp

@@ -85,8 +85,8 @@ export function LeadCard({ lead, onClick }: LeadCardProps) {
           {lead.painPoints.slice(0, 2).map((pain) => (
             <span
               key={pain}
-              className="text-[9px] px-1.5 py-0.5 bg-brushed-steel/10 text-machine-gray/60 rounded-sm"
-            > kadepower <Paintel>esll param onKeyDown</Paintel>
+            className="text-[9px] px-1.5 py-0.5 bg-brushed-steel/10 text-machine-gray/60 rounded-sm"
+            >
               {pain}
             </span>
           ))}

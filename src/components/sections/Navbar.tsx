@@ -22,7 +22,7 @@ const serviciosSubmenu = [
 
 const accesoSubmenu = [
   { label: "Área de Clientes", desc: "Portal de seguimiento de tu proyecto", href: "/area-clientes" },
-  { label: "Área de Trabajador", desc: "Dashboard interno del equipo", href: "/area-clientes" },
+  { label: "Área de Trabajador", desc: "Dashboard interno del equipo", href: "/area-trabajadores" },
 ];
 
 const navLinks = [
