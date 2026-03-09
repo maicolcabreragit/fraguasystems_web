@@ -86,12 +86,12 @@ export function KPICard({
         )}
       </div>
 
-      <p className="text-2xl font-bold text-titanium-white tracking-tight">
+      <p className="text-2xl font-bold text-white tracking-tight">
         {prefix}
         {displayValue.toLocaleString("es-ES")}
         {suffix}
       </p>
-      <p className="text-xs text-machine-gray/70 mt-1 uppercase tracking-wider">
+      <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider">
         {title}
       </p>
     </motion.div>

@@ -56,14 +56,14 @@ export default function DashboardPage() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-xl font-bold text-titanium-white tracking-tight">
+          <h1 className="text-2xl font-bold text-white tracking-tight">
             Dashboard
           </h1>
-          <p className="text-xs text-machine-gray/50 mt-0.5">
+          <p className="text-sm text-gray-400 mt-0.5">
             Fragua Systems — Panel de control interno
           </p>
         </div>
-        <div className="text-[11px] text-machine-gray/40">
+        <div className="text-sm text-gray-400">
           {new Date().toLocaleDateString("es-ES", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
         </div>
       </motion.div>
@@ -119,7 +119,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Pipeline breakdown */}
         <div className="xl:col-span-2 bg-[#141619] border border-brushed-steel/10 p-5">
-          <h2 className="text-sm font-semibold text-titanium-white/90 mb-4">
+          <h2 className="text-sm font-semibold text-white mb-4">
             Pipeline por estado
           </h2>
           <div className="space-y-2.5">
@@ -127,7 +127,7 @@ export default function DashboardPage() {
               const pct = stats.totalLeads > 0 ? (count / stats.totalLeads) * 100 : 0;
               return (
                 <div key={status} className="flex items-center gap-3">
-                  <span className="text-xs text-machine-gray/70 w-28 shrink-0">
+                  <span className="text-xs text-gray-300 w-28 shrink-0">
                     {STATUS_LABELS[status] || status}
                   </span>
                   <div className="flex-1 h-2 bg-brushed-steel/10 rounded-full overflow-hidden">
@@ -144,7 +144,7 @@ export default function DashboardPage() {
                       }`}
                     />
                   </div>
-                  <span className="text-xs text-machine-gray/50 w-8 text-right">
+                  <span className="text-xs text-gray-400 w-8 text-right">
                     {count}
                   </span>
                 </div>
@@ -154,7 +154,7 @@ export default function DashboardPage() {
 
           {/* Tier breakdown */}
           <div className="mt-6 pt-4 border-t border-brushed-steel/10">
-            <h3 className="text-xs font-medium text-machine-gray/60 uppercase tracking-wider mb-3">
+            <h3 className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-3">
               Por Tier
             </h3>
             <div className="flex gap-4">
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                   }`}>
                     {tier === "A" ? "🔥 Tier A" : tier === "B" ? "🟡 Tier B" : "🔵 Tier C"}
                   </span>
-                  <span className="text-sm font-medium text-titanium-white/80">
+                  <span className="text-sm font-medium text-white">
                     {count}
                   </span>
                 </div>
@@ -180,14 +180,14 @@ export default function DashboardPage() {
           {/* Conversion */}
           <div className="mt-6 pt-4 border-t border-brushed-steel/10 flex items-center gap-4">
             <div>
-              <span className="text-xs text-machine-gray/50 uppercase tracking-wider">Tasa de conversión</span>
+              <span className="text-xs text-gray-300 uppercase tracking-wider">Tasa de conversión</span>
               <span className="block text-2xl font-bold text-industrial-gold mt-1">
                 {stats.conversionRate}%
               </span>
             </div>
             <div>
-              <span className="text-xs text-machine-gray/50 uppercase tracking-wider">Proyectos activos</span>
-              <span className="block text-2xl font-bold text-titanium-white mt-1">
+              <span className="text-xs text-gray-300 uppercase tracking-wider">Proyectos activos</span>
+              <span className="block text-2xl font-bold text-white mt-1">
                 {stats.activeProjects}
               </span>
             </div>
@@ -196,7 +196,7 @@ export default function DashboardPage() {
 
         {/* Recent activity */}
         <div className="bg-[#141619] border border-brushed-steel/10 p-5">
-          <h2 className="text-sm font-semibold text-titanium-white/90 mb-4">
+          <h2 className="text-sm font-semibold text-white mb-4">
             Actividad reciente
           </h2>
           <ActivityTimeline activities={stats.recentActivities} />
