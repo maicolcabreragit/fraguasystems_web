@@ -63,9 +63,11 @@ export function Sidebar() {
       {/* ─── Logo ──────────────────────────────────────────── */}
       <div className="p-6 border-b border-brushed-steel/10">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-molten-copper/15 border border-molten-copper/30 flex items-center justify-center text-molten-copper font-bold text-sm">
-            FS
-          </div>
+          <img
+            src="/brand/logo.png"
+            alt="Fragua Systems"
+            className="w-9 h-9 rounded-lg object-contain"
+          />
           <div>
             <span className="text-titanium-white font-semibold text-sm tracking-wide">
               Fragua Systems
