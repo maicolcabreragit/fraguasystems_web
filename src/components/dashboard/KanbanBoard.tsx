@@ -62,25 +62,25 @@ export function KanbanBoard({ leads, onLeadClick, onStatusChange }: KanbanBoardP
             onDragLeave={handleDragLeave}
             onDrop={(e) => handleDrop(e, column.status)}
             className={`
-              flex-shrink-0 w-[260px] flex flex-col
-              bg-[#0f1013] border ${isOver ? "border-molten-copper/40 bg-molten-copper/5" : "border-brushed-steel/8"}
+              flex-shrink-0 w-[280px] flex flex-col rounded-lg
+              bg-[#0f1013] border ${isOver ? "border-molten-copper/40 bg-molten-copper/5" : "border-[#1e2028]"}
               transition-colors duration-200
             `}
           >
             {/* Column Header */}
-            <div className={`px-3 py-2.5 border-b ${column.color} bg-[#111316]`}>
+            <div className={`px-4 py-3 border-b ${column.color} bg-[#131519] rounded-t-lg`}>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-titanium-white/80">
+                <span className="text-sm font-semibold text-white">
                   {column.label}
                 </span>
-                <span className="text-[10px] text-machine-gray/50 bg-brushed-steel/10 px-1.5 py-0.5 rounded-sm">
+                <span className="text-[12px] font-medium text-gray-400 bg-[#1c1f26] px-2 py-0.5 rounded-full min-w-[28px] text-center">
                   {columnLeads.length}
                 </span>
               </div>
             </div>
 
             {/* Cards Container */}
-            <div className="flex-1 p-2 space-y-2 overflow-y-auto">
+            <div className="flex-1 p-2.5 space-y-2.5 overflow-y-auto">
               <AnimatePresence mode="popLayout">
                 {columnLeads.map((lead) => (
                   <LeadCard key={lead.id} lead={lead} onClick={onLeadClick} />
@@ -91,7 +91,7 @@ export function KanbanBoard({ leads, onLeadClick, onStatusChange }: KanbanBoardP
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex items-center justify-center h-20 text-[11px] text-machine-gray/30 border border-dashed border-brushed-steel/10"
+                  className="flex items-center justify-center h-24 text-[12px] text-gray-500 border border-dashed border-[#2a2d35] rounded-lg"
                 >
                   Arrastra leads aquí
                 </motion.div>
