@@ -21,9 +21,9 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
 };
 
 const TIER_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  A: { label: "🔥 Tier A", color: "text-red-300",   bg: "bg-red-500/15 border-red-500/25" },
-  B: { label: "⭐ Tier B", color: "text-amber-300", bg: "bg-amber-500/15 border-amber-500/25" },
-  C: { label: "🔵 Tier C", color: "text-blue-300",  bg: "bg-blue-500/15 border-blue-500/25" },
+  A: { label: "A", color: "text-red-300",   bg: "bg-red-500/15 border-red-500/25" },
+  B: { label: "B", color: "text-amber-300", bg: "bg-amber-500/15 border-amber-500/25" },
+  C: { label: "C", color: "text-blue-300",  bg: "bg-blue-500/15 border-blue-500/25" },
 };
 
 const BIZ_ICONS: Record<string, string> = {
@@ -272,7 +272,7 @@ export default function LeadsPage() {
       {/* Table */}
       <div className="bg-[#0f1013] border border-[#1e2028] rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[900px]">
             <thead>
               <tr className="border-b border-[#1e2028]">
                 <th
@@ -334,33 +334,33 @@ export default function LeadsPage() {
                     onClick={() => setSelectedLead(lead)}
                     className="border-b border-[#1a1d22] hover:bg-[#151820] cursor-pointer transition-colors group"
                   >
-                    <td className="px-4 py-3">
-                      <span className="text-[14px] font-semibold text-white group-hover:text-molten-copper transition-colors">
+                    <td className="px-4 py-3 max-w-[200px]">
+                      <span className="text-[13px] font-semibold text-white group-hover:text-molten-copper transition-colors block truncate">
                         {lead.businessName || "Sin nombre"}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="text-[13px] text-gray-300">
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className="text-[12px] text-gray-300">
                         {icon} {lead.businessType}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="text-[13px] text-gray-400">{lead.location || "—"}</span>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className="text-[12px] text-gray-400">{lead.location || "—"}</span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="text-[13px] text-gray-400 font-mono">{lead.phone || "—"}</span>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className="text-[12px] text-gray-400 font-mono">{lead.phone || "—"}</span>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${tier.bg} ${tier.color}`}>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className={`text-[11px] font-bold w-6 h-6 inline-flex items-center justify-center rounded-full border ${tier.bg} ${tier.color}`}>
                         {tier.label}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="text-[14px] font-bold text-industrial-gold">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
+                      <span className="text-[13px] font-bold text-industrial-gold">
                         €{lead.estimatedTicket.toLocaleString("es-ES")}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <select
                         value={lead.status}
                         onChange={(e) => { e.stopPropagation(); handleStatusChange(lead.id, e.target.value as LeadStatus); }}
@@ -372,8 +372,8 @@ export default function LeadsPage() {
                         ))}
                       </select>
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="text-[12px] text-gray-500 line-clamp-1 max-w-[140px] block">
+                    <td className="px-4 py-3 max-w-[120px]">
+                      <span className="text-[11px] text-gray-500 truncate block">
                         {lead.nextAction || "—"}
                       </span>
                     </td>
