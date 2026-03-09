@@ -172,6 +172,8 @@ body::before {
 }
 
 /* ─── Typography Hierarchy ──────────────────────────────────────── */
+/* NOTE: heading color/size only applied to public website sections,
+   NOT the dashboard (which uses Tailwind utilities directly) */
 h1,
 h2,
 h3,
@@ -179,22 +181,33 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display), "IBM Plex Sans", system-ui, sans-serif;
-  color: var(--color-ink-black);
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
 
-h1 {
+/* Public-facing pages only */
+.section-light h1,
+.section-light h2,
+.section-light h3,
+.section-light h4,
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  font-size: revert;
+}
+
+:where(h1) {
   font-size: clamp(2.5rem, 5vw, 3.75rem);
   font-weight: 700;
 }
 
-h2 {
+:where(h2) {
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   font-weight: 600;
 }
 
-h3 {
+:where(h3) {
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
   font-weight: 500;
 }
