@@ -561,7 +561,7 @@ function LeadDetailPanel({
           {/* Header */}
           <div className="sticky top-0 z-10 bg-[#111316] border-b border-[#1e2028] p-5 flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-white">{lead.businessName}</h2>
+              <h2 className="text-base font-bold text-white">{lead.businessName}</h2>
               <p className="text-sm text-gray-400">
                 {BIZ_ICONS[lead.businessType] || "📍"} {lead.businessType} · {lead.location}
               </p>
@@ -592,8 +592,8 @@ function LeadDetailPanel({
 
           <div className="p-5 space-y-5">
             {/* Contact Info */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Contacto</h3>
+            <div className="bg-[#0d0f12] rounded-lg p-4 space-y-3">
+              <h3 className="text-[11px] font-bold text-gray-300 uppercase tracking-widest border-l-2 border-molten-copper pl-2">Contacto</h3>
               {editing ? (
                 <div className="space-y-2">
                   <input value={editData.contactName} onChange={(e) => setEditData({ ...editData, contactName: e.target.value })} placeholder="Nombre" className={inputClass} />
@@ -602,17 +602,18 @@ function LeadDetailPanel({
                 </div>
               ) : (
                 <div className="space-y-1.5">
-                  <p className="text-sm text-white">{lead.contactName || "—"} <span className="text-gray-500">· {lead.contactRole}</span></p>
+                  {lead.contactName && <p className="text-sm text-white">{lead.contactName} {lead.contactRole && <span className="text-gray-500">· {lead.contactRole}</span>}</p>}
                   {lead.phone && <p className="text-sm text-gray-300">📞 {lead.phone}</p>}
                   {lead.email && <p className="text-sm text-gray-300">✉️ {lead.email}</p>}
+                  {!lead.contactName && !lead.phone && !lead.email && <p className="text-sm text-gray-500 italic">Sin datos de contacto</p>}
                 </div>
               )}
             </div>
 
             {/* Status & Tier */}
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Estado</h3>
+              <div className="bg-[#0d0f12] rounded-lg p-4">
+                <h3 className="text-[11px] font-bold text-gray-300 uppercase tracking-widest border-l-2 border-molten-copper pl-2 mb-2">Estado</h3>
                 {editing ? (
                   <select value={editData.status} onChange={(e) => setEditData({ ...editData, status: e.target.value as Lead["status"] })} className={inputClass}>
                     {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
@@ -620,17 +621,17 @@ function LeadDetailPanel({
                     ))}
                   </select>
                 ) : (
-                  <span className={`text-sm font-medium ${STATUS_CONFIG[lead.status]?.color || "text-gray-400"}`}>
+                  <span className={`text-sm font-semibold ${STATUS_CONFIG[lead.status]?.color || "text-gray-400"}`}>
                     {STATUS_CONFIG[lead.status]?.label || lead.status}
                   </span>
                 )}
               </div>
-              <div>
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Ticket</h3>
+              <div className="bg-[#0d0f12] rounded-lg p-4">
+                <h3 className="text-[11px] font-bold text-gray-300 uppercase tracking-widest border-l-2 border-industrial-gold pl-2 mb-2">Ticket</h3>
                 {editing ? (
                   <input type="number" value={editData.estimatedTicket} onChange={(e) => setEditData({ ...editData, estimatedTicket: Number(e.target.value) })} className={inputClass} />
                 ) : (
-                  <span className="text-sm font-bold text-industrial-gold">
+                  <span className="text-lg font-bold text-industrial-gold">
                     €{lead.estimatedTicket.toLocaleString("es-ES")}
                   </span>
                 )}
@@ -639,12 +640,12 @@ function LeadDetailPanel({
 
             {/* Notes */}
             {(lead.notes || editing) && (
-              <div>
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Notas</h3>
+              <div className="bg-[#0d0f12] rounded-lg p-4">
+                <h3 className="text-[11px] font-bold text-gray-300 uppercase tracking-widest border-l-2 border-blue-400 pl-2 mb-2">Notas</h3>
                 {editing ? (
-                  <textarea value={editData.notes} onChange={(e) => setEditData({ ...editData, notes: e.target.value })} rows={3} className={inputClass + " resize-none"} />
+                  <textarea value={editData.notes} onChange={(e) => setEditData({ ...editData, notes: e.target.value })} rows={4} className={inputClass + " resize-none"} />
                 ) : (
-                  <p className="text-sm text-gray-400 leading-relaxed">{lead.notes}</p>
+                  <p className="text-[13px] text-gray-300 leading-relaxed whitespace-pre-wrap">{lead.notes}</p>
                 )}
               </div>
             )}
@@ -652,7 +653,7 @@ function LeadDetailPanel({
             {/* Activity Section */}
             <div className="border-t border-[#1e2028] pt-5">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <h3 className="text-[11px] font-bold text-gray-300 uppercase tracking-widest border-l-2 border-purple-400 pl-2">
                   Historial de actividad
                 </h3>
                 <button
