@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AddLeadModal } from "@/components/dashboard/AddLeadModal";
 import { ActivityTimeline } from "@/components/dashboard/ActivityTimeline";
 import type { Lead, LeadStatus, Activity } from "@/lib/data";
+import Link from "next/link";
 
 /* ═══════════════════════════════════════════════════════════════════
-   CRM Pipeline — Professional table view with filters & pagination
+   CRM Pipeline — Table view with filters, pagination & Canvas CTA
    ═══════════════════════════════════════════════════════════════════ */
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -314,8 +315,8 @@ export default function LeadsPage() {
                 >
                   Estado <SortIcon field="status" />
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                  Acción
+                <th className="text-center px-4 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Canvas
                 </th>
               </tr>
             </thead>
@@ -372,10 +373,18 @@ export default function LeadsPage() {
                         ))}
                       </select>
                     </td>
-                    <td className="px-4 py-3 max-w-[120px]">
-                      <span className="text-[11px] text-gray-500 truncate block">
-                        {lead.nextAction || "—"}
-                      </span>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
+                      <Link
+                        href={`/dashboard/leads/${lead.id}/canvas`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg border border-molten-copper/30 text-molten-copper hover:bg-molten-copper/10 active:scale-[0.97] transition-all"
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                          <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+                        </svg>
+                        Canvas
+                      </Link>
                     </td>
                   </motion.tr>
                 );
@@ -567,6 +576,16 @@ function LeadDetailPanel({
               </p>
             </div>
             <div className="flex items-center gap-2">
+              <Link
+                href={`/dashboard/leads/${lead.id}/canvas`}
+                className="text-xs text-molten-copper hover:text-molten-copper/80 transition-colors px-3 py-1.5 border border-molten-copper/30 rounded-lg flex items-center gap-1.5"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+                </svg>
+                Canvas
+              </Link>
               {!editing ? (
                 <button
                   onClick={() => setEditing(true)}
@@ -702,4 +721,3 @@ function LeadDetailPanel({
     </AnimatePresence>
   );
 }
-

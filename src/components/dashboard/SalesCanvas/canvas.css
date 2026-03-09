@@ -1,0 +1,558 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Sales Intelligence Canvas — Industrial Luxe Theme Overrides
+   React Flow v12 dark theme + custom node/edge/control styling
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import "@xyflow/react/dist/style.css";
+
+/* ─── Canvas Background ────────────────────────────────────────── */
+.react-flow {
+  background-color: #0a0a0a !important;
+}
+
+/* ─── Node Base Reset ──────────────────────────────────────────── */
+.react-flow__node {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: var(--font-body), "Inter", system-ui, sans-serif;
+}
+
+.react-flow__node.selected {
+  box-shadow: none !important;
+}
+
+/* ─── Handles ──────────────────────────────────────────────────── */
+.react-flow__handle {
+  width: 10px !important;
+  height: 10px !important;
+  border: 2px solid #0a0a0a !important;
+  transition: all 0.2s ease;
+}
+
+.react-flow__handle:hover {
+  transform: scale(1.4);
+}
+
+.react-flow__handle-right {
+  right: -5px !important;
+}
+
+.react-flow__handle-left {
+  left: -5px !important;
+}
+
+/* Source handle — molten-copper */
+.react-flow__handle.source-copper {
+  background: #c86a3d !important;
+  box-shadow: 0 0 8px rgba(200, 106, 61, 0.5);
+}
+
+/* Target handle — brushed-steel */
+.react-flow__handle.target-steel {
+  background: #2e3542 !important;
+  box-shadow: 0 0 8px rgba(46, 53, 66, 0.5);
+}
+
+/* AI handles — industrial-gold */
+.react-flow__handle.handle-gold {
+  background: #d4af37 !important;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+/* API handles — muted steel */
+.react-flow__handle.handle-api {
+  background: #8a9197 !important;
+  box-shadow: 0 0 6px rgba(138, 145, 151, 0.3);
+}
+
+/* ─── Edges ────────────────────────────────────────────────────── */
+.react-flow__edge-path {
+  stroke-width: 2 !important;
+}
+
+@keyframes edgeFlow {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animated-edge-path {
+  stroke: #2e3542;
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  animation: edgeFlow 1s linear infinite;
+  transition: stroke 0.3s ease;
+}
+
+.animated-edge-path:hover {
+  stroke: #c86a3d;
+}
+
+/* ─── Edge Glow Effect ─────────────────────────────────────────── */
+.animated-edge-glow {
+  stroke: rgba(200, 106, 61, 0.15);
+  stroke-width: 8;
+  stroke-dasharray: 6 6;
+  animation: edgeFlow 1s linear infinite;
+  filter: blur(4px);
+}
+
+/* ─── Controls ─────────────────────────────────────────────────── */
+.react-flow__controls {
+  background: #141619 !important;
+  border: 1px solid #2a2d35 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background: #141619 !important;
+  border: none !important;
+  border-bottom: 1px solid #1e2028 !important;
+  fill: #8a9197 !important;
+  width: 32px !important;
+  height: 32px !important;
+  transition: all 0.15s ease;
+}
+
+.react-flow__controls-button:hover {
+  background: #1e2028 !important;
+  fill: #e6e7ea !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+/* ─── MiniMap ──────────────────────────────────────────────────── */
+.react-flow__minimap {
+  background: #0f1013 !important;
+  border: 1px solid #2a2d35 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  overflow: hidden;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(200, 106, 61, 0.08) !important;
+  stroke: rgba(200, 106, 61, 0.3) !important;
+  stroke-width: 1 !important;
+}
+
+/* ─── Attribution hide (we'll credit in docs) ──────────────────── */
+.react-flow__attribution {
+  display: none !important;
+}
+
+/* ─── Selection Box ────────────────────────────────────────────── */
+.react-flow__selection {
+  background: rgba(200, 106, 61, 0.06) !important;
+  border: 1px solid rgba(200, 106, 61, 0.3) !important;
+}
+
+/* ─── Node Cards — Shared Glassmorphism ────────────────────────── */
+.canvas-node-card {
+  background: rgba(20, 22, 25, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(42, 45, 53, 0.8);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.canvas-node-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: radial-gradient(
+    300px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(200, 106, 61, var(--mi, 0)),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.canvas-node-card:hover {
+  border-color: rgba(200, 106, 61, 0.25);
+  box-shadow: 0 0 24px rgba(200, 106, 61, 0.08);
+}
+
+/* AI Node special glow */
+.canvas-node-card.ai-glow {
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+.canvas-node-card.ai-glow::before {
+  background: radial-gradient(
+    300px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(212, 175, 55, var(--mi, 0)),
+    transparent 70%
+  );
+}
+
+.canvas-node-card.ai-glow:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 32px rgba(212, 175, 55, 0.12),
+    inset 0 0 24px rgba(212, 175, 55, 0.03);
+}
+
+/* API Node techical style */
+.canvas-node-card.api-tech {
+  border-color: rgba(138, 145, 151, 0.25);
+  border-radius: 8px;
+}
+
+.canvas-node-card.api-tech::before {
+  background: radial-gradient(
+    250px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(138, 145, 151, var(--mi, 0)),
+    transparent 70%
+  );
+}
+
+.canvas-node-card.api-tech:hover {
+  border-color: rgba(138, 145, 151, 0.4);
+  box-shadow: 0 0 20px rgba(138, 145, 151, 0.08);
+}
+
+/* ─── Tier Badges ──────────────────────────────────────────────── */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.tier-badge.tier-a {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.tier-badge.tier-b {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.tier-badge.tier-c {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* ─── Pulse animation for AI node ──────────────────────────────── */
+@keyframes aiPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.ai-pulse-ring {
+  animation: aiPulse 3s ease-in-out infinite;
+}
+
+/* ─── Scanline effect for API node ─────────────────────────────── */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.api-scanline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(138, 145, 151, 0.3),
+    transparent
+  );
+  animation: scanline 4s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Phase 1.5 — UX Enhancements
+   Tool Mode Bar, Context Menu, Cursors, Performance
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Cursor Mode Classes ──────────────────────────────────────── */
+.canvas-cursor-grab .react-flow__pane {
+  cursor: grab !important;
+}
+
+.canvas-cursor-grabbing .react-flow__pane {
+  cursor: grabbing !important;
+}
+
+/* ─── Tool Mode Bar ────────────────────────────────────────────── */
+.tool-mode-bar {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tool-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  color: #8a9197;
+  font-family: var(--font-body), "Inter", system-ui, sans-serif;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  background: transparent;
+}
+
+.tool-mode-btn:hover {
+  color: #e6e7ea;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tool-mode-btn-active {
+  color: #e6e7ea !important;
+  background: rgba(200, 106, 61, 0.12) !important;
+  border-color: rgba(200, 106, 61, 0.25) !important;
+  box-shadow: 0 0 12px rgba(200, 106, 61, 0.08);
+}
+
+/* Keyboard hint badge */
+.kbd-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #8a9197;
+  font-family: "SF Mono", "Menlo", "Monaco", monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* ─── Context Menu ─────────────────────────────────────────────── */
+.ctx-menu {
+  min-width: 200px;
+  background: rgba(20, 22, 25, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(42, 45, 53, 0.8);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  animation: ctxMenuIn 0.12s ease-out;
+}
+
+@keyframes ctxMenuIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.ctx-menu-section {
+  padding: 2px 0;
+}
+
+.ctx-menu-label {
+  display: block;
+  padding: 4px 10px 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-body), "Inter", system-ui, sans-serif;
+}
+
+.ctx-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #c0c4ca;
+  font-size: 12px;
+  font-family: var(--font-body), "Inter", system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-align: left;
+}
+
+.ctx-menu-item:hover {
+  background: rgba(200, 106, 61, 0.1);
+  color: #fff;
+}
+
+.ctx-menu-item:active {
+  transform: scale(0.98);
+}
+
+.ctx-menu-divider {
+  height: 1px;
+  margin: 4px 8px;
+  background: rgba(42, 45, 53, 0.6);
+}
+
+/* ─── Selection Enhancements ───────────────────────────────────── */
+.react-flow__nodesselection-rect {
+  background: rgba(200, 106, 61, 0.06) !important;
+  border: 1px dashed rgba(200, 106, 61, 0.4) !important;
+  border-radius: 4px;
+}
+
+.react-flow__node.selected .canvas-node-card {
+  border-color: rgba(200, 106, 61, 0.5) !important;
+  box-shadow: 0 0 20px rgba(200, 106, 61, 0.12),
+    0 0 0 2px rgba(200, 106, 61, 0.2) !important;
+}
+
+/* ─── Performance: GPU-accelerated node transforms ─────────────── */
+.react-flow__node {
+  will-change: transform;
+  contain: layout style;
+}
+
+.react-flow__edge {
+  will-change: auto;
+}
+
+.react-flow__viewport {
+  will-change: transform;
+}
+
+/* ─── Custom Scrollbar (used by modals / panels) ───────────────── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2a2d35;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3a3d45;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2d35 transparent;
+}
+
+/* ─── Node Handles (Visible Connection Points) ─────────────────── */
+
+/* Source handle — molten-copper glowing dot */
+.source-copper {
+  width: 12px !important;
+  height: 12px !important;
+  background: #c86a3d !important;
+  border: 2px solid #e8956a !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 8px rgba(200, 106, 61, 0.5),
+    0 0 2px rgba(200, 106, 61, 0.8) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  cursor: crosshair !important;
+  z-index: 20 !important;
+}
+
+.source-copper:hover {
+  transform: scale(1.4) !important;
+  box-shadow: 0 0 14px rgba(200, 106, 61, 0.7),
+    0 0 4px rgba(200, 106, 61, 1) !important;
+}
+
+/* Target handle — gold/steel dot */
+.handle-gold {
+  width: 10px !important;
+  height: 10px !important;
+  background: #d4af37 !important;
+  border: 2px solid rgba(212, 175, 55, 0.6) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.4) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  cursor: crosshair !important;
+  z-index: 20 !important;
+}
+
+.handle-gold:hover {
+  transform: scale(1.4) !important;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6),
+    0 0 3px rgba(212, 175, 55, 0.9) !important;
+}
+
+/* Handle for target inputs on action nodes — subtle steel */
+.handle-target {
+  width: 10px !important;
+  height: 10px !important;
+  background: #6b7280 !important;
+  border: 2px solid #9ca3af !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 6px rgba(107, 114, 128, 0.4) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    background 0.15s ease !important;
+  cursor: crosshair !important;
+  z-index: 20 !important;
+}
+
+.handle-target:hover {
+  transform: scale(1.4) !important;
+  background: #d4af37 !important;
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.5) !important;
+}
+
+/* Subtle pulse for source handles */
+@keyframes handlePulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(200, 106, 61, 0.4); }
+  50% { box-shadow: 0 0 14px rgba(200, 106, 61, 0.7); }
+}
+
+.source-copper {
+  animation: handlePulse 2.5s ease-in-out infinite;
+}
+
