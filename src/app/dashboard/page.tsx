@@ -63,7 +63,7 @@ export default function DashboardPage() {
             Fragua Systems — Panel de control interno
           </p>
         </div>
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-gray-400" suppressHydrationWarning>
           {new Date().toLocaleDateString("es-ES", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
         </div>
       </motion.div>
